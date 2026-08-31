@@ -16,26 +16,28 @@ local clickGui = {
 
 local theme = {
 	bg = Color3.fromRGB(15, 16, 22),
-	topbar = Color3.fromRGB(13, 14, 19),
-	tabBar = Color3.fromRGB(18, 20, 27),
-	card = Color3.fromRGB(21, 23, 31),
-	cardBorder = Color3.fromRGB(32, 35, 47),
-	element = Color3.fromRGB(26, 29, 39),
-	elementHover = Color3.fromRGB(34, 38, 52),
-	dropdownBg = Color3.fromRGB(17, 19, 26),
-	dropdownItemHover = Color3.fromRGB(26, 29, 40),
-	dropdownItemSelected = Color3.fromRGB(30, 34, 46),
+	topbar = Color3.fromRGB(13, 14, 20),
+	tabBar = Color3.fromRGB(19, 21, 29),
+	card = Color3.fromRGB(22, 24, 33),
+	cardBorder = Color3.fromRGB(42, 47, 64),
+	cardBorderHover = Color3.fromRGB(60, 68, 92),
+	element = Color3.fromRGB(28, 31, 43),
+	elementHover = Color3.fromRGB(38, 43, 60),
+	dropdownBg = Color3.fromRGB(18, 20, 28),
+	dropdownItemHover = Color3.fromRGB(29, 33, 46),
+	dropdownItemSelected = Color3.fromRGB(34, 39, 54),
 	accent = Color3.fromRGB(124, 92, 252),
 	accentLight = Color3.fromRGB(111, 124, 247),
-	text = Color3.fromRGB(240, 242, 248),
-	textMuted = Color3.fromRGB(160, 165, 180),
-	textDesc = Color3.fromRGB(105, 110, 128),
-	textDark = Color3.fromRGB(75, 80, 100),
-	switchOff = Color3.fromRGB(36, 40, 54),
+	accentHover = Color3.fromRGB(140, 110, 255),
+	text = Color3.fromRGB(242, 244, 250),
+	textMuted = Color3.fromRGB(165, 170, 188),
+	textDesc = Color3.fromRGB(110, 116, 136),
+	textDark = Color3.fromRGB(80, 86, 108),
+	switchOff = Color3.fromRGB(38, 42, 58),
 	switchKnob = Color3.fromRGB(255, 255, 255),
 	starActive = Color3.fromRGB(255, 208, 66),
-	starInactive = Color3.fromRGB(65, 70, 90),
-	sliderTrack = Color3.fromRGB(32, 36, 48)
+	starInactive = Color3.fromRGB(70, 76, 98),
+	sliderTrack = Color3.fromRGB(34, 38, 52)
 }
 
 local fonts = {
@@ -229,8 +231,8 @@ function clickGui:CreateWindow(config)
 
 	local mainFrame = Instance.new("Frame")
 	mainFrame.Name = "MainFrame"
-	mainFrame.Size = UDim2.new(0, 880, 0, 540)
-	mainFrame.Position = UDim2.new(0.5, -440, 0.5, -270)
+	mainFrame.Size = UDim2.new(0, 890, 0, 540)
+	mainFrame.Position = UDim2.new(0.5, -445, 0.5, -270)
 	mainFrame.BackgroundColor3 = theme.bg
 	mainFrame.BorderSizePixel = 0
 	mainFrame.ClipsDescendants = false
@@ -242,7 +244,7 @@ function clickGui:CreateWindow(config)
 
 	local mainStroke = Instance.new("UIStroke")
 	mainStroke.Color = theme.cardBorder
-	mainStroke.Thickness = 1
+	mainStroke.Thickness = 1.2
 	mainStroke.Parent = mainFrame
 
 	local topBar = Instance.new("Frame")
@@ -288,8 +290,8 @@ function clickGui:CreateWindow(config)
 
 	local tabList = Instance.new("Frame")
 	tabList.Name = "TabList"
-	tabList.Size = UDim2.new(0, 340, 0, 30)
-	tabList.Position = UDim2.new(0.5, -170, 0.5, -15)
+	tabList.Size = UDim2.new(0, 350, 0, 30)
+	tabList.Position = UDim2.new(0.5, -175, 0.5, -15)
 	tabList.BackgroundColor3 = theme.tabBar
 	tabList.BorderSizePixel = 0
 	tabList.Parent = topBar
@@ -299,7 +301,7 @@ function clickGui:CreateWindow(config)
 	tabListCorner.Parent = tabList
 
 	local tabListStroke = Instance.new("UIStroke")
-	tabListStroke.Color = Color3.fromRGB(28, 31, 42)
+	tabListStroke.Color = theme.cardBorder
 	tabListStroke.Thickness = 1
 	tabListStroke.Parent = tabList
 
@@ -341,10 +343,10 @@ function clickGui:CreateWindow(config)
 		utilButton.Parent = utilityContainer
 
 		utilButton.MouseEnter:Connect(function()
-			tween(utilButton, TweenInfo.new(0.15), {ImageColor3 = theme.text})
+			tween(utilButton, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {ImageColor3 = theme.text})
 		end)
 		utilButton.MouseLeave:Connect(function()
-			tween(utilButton, TweenInfo.new(0.15), {ImageColor3 = theme.textDark})
+			tween(utilButton, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {ImageColor3 = theme.textDark})
 		end)
 	end
 
@@ -404,7 +406,7 @@ function clickGui:CreateWindow(config)
 
 		local activeLine = Instance.new("Frame")
 		activeLine.Name = "ActiveLine"
-		activeLine.Size = UDim2.new(0, 14, 0, 2)
+		activeLine.Size = (tabIndex == 1) and UDim2.new(0, 14, 0, 2) or UDim2.new(0, 0, 0, 2)
 		activeLine.Position = UDim2.new(0.5, -7, 1, -2)
 		activeLine.BackgroundColor3 = theme.accent
 		activeLine.BorderSizePixel = 0
@@ -433,7 +435,7 @@ function clickGui:CreateWindow(config)
 		columnsContainer.BackgroundTransparency = 1
 		columnsContainer.Parent = tabPage
 
-		local columnWidth = math.floor((880 - 24 - 24) / 3)
+		local columnWidth = math.floor((890 - 24 - 24) / 3)
 
 		local columns = {}
 		for colIdx = 1, 3 do
@@ -468,12 +470,14 @@ function clickGui:CreateWindow(config)
 		local function selectTab()
 			for _, otherTab in ipairs(window.tabs) do
 				otherTab.page.Visible = false
+				tween(otherTab.activeLine, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.new(0, 0, 0, 2)})
 				otherTab.activeLine.Visible = false
-				tween(otherTab.iconImage, TweenInfo.new(0.15), {ImageColor3 = theme.textDark})
+				tween(otherTab.iconImage, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {ImageColor3 = theme.textDark})
 			end
 			tabPage.Visible = true
 			activeLine.Visible = true
-			tween(tabIconImage, TweenInfo.new(0.15), {ImageColor3 = theme.accent})
+			tween(activeLine, TweenInfo.new(0.25, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Size = UDim2.new(0, 14, 0, 2)})
+			tween(tabIconImage, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {ImageColor3 = theme.accent})
 			clickGui.activeTab = tabIndex
 		end
 
@@ -517,7 +521,7 @@ function clickGui:CreateWindow(config)
 
 			local cardStroke = Instance.new("UIStroke")
 			cardStroke.Color = theme.cardBorder
-			cardStroke.Thickness = 1
+			cardStroke.Thickness = 1.1
 			cardStroke.Parent = cardFrame
 
 			local cardPadding = Instance.new("UIPadding")
@@ -596,14 +600,14 @@ function clickGui:CreateWindow(config)
 
 			starBtn.MouseButton1Click:Connect(function()
 				modFavorite = not modFavorite
-				tween(starBtn, TweenInfo.new(0.15), {
+				tween(starBtn, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
 					ImageColor3 = modFavorite and theme.starActive or theme.starInactive
 				})
 			end)
 
 			local bindBtn = Instance.new("TextButton")
 			bindBtn.Size = UDim2.new(0, 48, 0, 18)
-			bindBtn.BackgroundColor3 = Color3.fromRGB(26, 29, 40)
+			bindBtn.BackgroundColor3 = theme.element
 			bindBtn.Text = ""
 			bindBtn.AutoButtonColor = false
 			bindBtn.Parent = rightHeader
@@ -613,7 +617,7 @@ function clickGui:CreateWindow(config)
 			bindCorner.Parent = bindBtn
 
 			local bindStroke = Instance.new("UIStroke")
-			bindStroke.Color = Color3.fromRGB(36, 40, 54)
+			bindStroke.Color = theme.cardBorder
 			bindStroke.Thickness = 1
 			bindStroke.Parent = bindBtn
 
@@ -696,8 +700,8 @@ function clickGui:CreateWindow(config)
 				local targetColor = val and theme.accent or theme.switchOff
 				local targetKnobPos = val and UDim2.new(1, -14, 0.5, -6) or UDim2.new(0, 2, 0.5, -6)
 
-				tween(toggleSwitch, TweenInfo.new(0.18), {BackgroundColor3 = targetColor})
-				tween(switchKnob, TweenInfo.new(0.18), {Position = targetKnobPos})
+				tween(toggleSwitch, TweenInfo.new(0.22, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {BackgroundColor3 = targetColor})
+				tween(switchKnob, TweenInfo.new(0.22, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = targetKnobPos})
 
 				if not silent and moduleObject.callback then
 					moduleObject.callback(val)
@@ -741,22 +745,28 @@ function clickGui:CreateWindow(config)
 
 				local ddLayout = Instance.new("UIListLayout")
 				ddLayout.FillDirection = Enum.FillDirection.Vertical
-				ddLayout.Padding = UDim.new(0, 4)
+				ddLayout.SortOrder = Enum.SortOrder.LayoutOrder
+				ddLayout.Padding = UDim.new(0, 3)
 				ddLayout.Parent = ddContainer
 
+				local subOrder = 0
+
 				if dName ~= "" then
+					subOrder = subOrder + 1
 					local ddLabel = Instance.new("TextLabel")
 					ddLabel.Size = UDim2.new(1, 0, 0, 14)
 					ddLabel.BackgroundTransparency = 1
 					ddLabel.Font = fonts.medium
 					ddLabel.Text = dName
 					ddLabel.TextColor3 = theme.text
-					ddLabel.TextSize = 11
+					ddLabel.TextSize = 11.5
 					ddLabel.TextXAlignment = Enum.TextXAlignment.Left
+					ddLabel.LayoutOrder = subOrder
 					ddLabel.Parent = ddContainer
 				end
 
 				if dDesc ~= "" then
+					subOrder = subOrder + 1
 					local ddDescLabel = Instance.new("TextLabel")
 					ddDescLabel.Size = UDim2.new(1, 0, 0, 12)
 					ddDescLabel.BackgroundTransparency = 1
@@ -766,14 +776,17 @@ function clickGui:CreateWindow(config)
 					ddDescLabel.TextSize = 9.5
 					ddDescLabel.TextXAlignment = Enum.TextXAlignment.Left
 					ddDescLabel.TextTruncate = Enum.TextTruncate.AtEnd
+					ddDescLabel.LayoutOrder = subOrder
 					ddDescLabel.Parent = ddContainer
 				end
 
+				subOrder = subOrder + 1
 				local ddBox = Instance.new("TextButton")
 				ddBox.Size = UDim2.new(1, 0, 0, 26)
 				ddBox.BackgroundColor3 = theme.element
 				ddBox.Text = ""
 				ddBox.AutoButtonColor = false
+				ddBox.LayoutOrder = subOrder
 				ddBox.Parent = ddContainer
 
 				local ddBoxCorner = Instance.new("UICorner")
@@ -782,7 +795,7 @@ function clickGui:CreateWindow(config)
 
 				local ddBoxStroke = Instance.new("UIStroke")
 				ddBoxStroke.Color = theme.cardBorder
-				ddBoxStroke.Thickness = 1
+				ddBoxStroke.Thickness = 1.1
 				ddBoxStroke.Parent = ddBox
 
 				local ddFilterIcon = Instance.new("ImageLabel")
@@ -813,6 +826,7 @@ function clickGui:CreateWindow(config)
 				ddArrow.ImageColor3 = theme.textDesc
 				ddArrow.Parent = ddBox
 
+				subOrder = subOrder + 1
 				local ddListFrame = Instance.new("Frame")
 				ddListFrame.Name = "OptionsList"
 				ddListFrame.Size = UDim2.new(1, 0, 0, 0)
@@ -820,6 +834,7 @@ function clickGui:CreateWindow(config)
 				ddListFrame.BorderSizePixel = 0
 				ddListFrame.ClipsDescendants = true
 				ddListFrame.Visible = dIsOpen
+				ddListFrame.LayoutOrder = subOrder
 				ddListFrame.AutomaticSize = Enum.AutomaticSize.Y
 				ddListFrame.Parent = ddContainer
 
@@ -829,7 +844,7 @@ function clickGui:CreateWindow(config)
 
 				local listStroke = Instance.new("UIStroke")
 				listStroke.Color = theme.cardBorder
-				listStroke.Thickness = 1
+				listStroke.Thickness = 1.1
 				listStroke.Parent = ddListFrame
 
 				local listLayout = Instance.new("UIListLayout")
@@ -887,16 +902,19 @@ function clickGui:CreateWindow(config)
 						optCheck.Parent = optBtn
 
 						optBtn.MouseEnter:Connect(function()
-							tween(optBtn, TweenInfo.new(0.12), {BackgroundTransparency = 0.5, BackgroundColor3 = theme.dropdownItemHover})
-							tween(optText, TweenInfo.new(0.12), {TextColor3 = theme.text})
+							tween(optBtn, TweenInfo.new(0.15, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+								BackgroundTransparency = 0.5,
+								BackgroundColor3 = theme.dropdownItemHover
+							})
+							tween(optText, TweenInfo.new(0.15, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {TextColor3 = theme.text})
 						end)
 						optBtn.MouseLeave:Connect(function()
-							tween(optBtn, TweenInfo.new(0.12), {
+							tween(optBtn, TweenInfo.new(0.15, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
 								BackgroundTransparency = (optionName == dSelected) and 0.4 or 1,
 								BackgroundColor3 = (optionName == dSelected) and theme.dropdownItemSelected or theme.element
 							})
 							if optionName ~= dSelected then
-								tween(optText, TweenInfo.new(0.12), {TextColor3 = theme.textDesc})
+								tween(optText, TweenInfo.new(0.15, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {TextColor3 = theme.textDesc})
 							end
 						end)
 
@@ -916,6 +934,13 @@ function clickGui:CreateWindow(config)
 					isOpen = not isOpen
 					ddListFrame.Visible = isOpen
 					clickGui.applyIcon(ddArrow, isOpen and "chevron-up" or "chevron-down")
+				end)
+
+				ddBox.MouseEnter:Connect(function()
+					tween(ddBoxStroke, TweenInfo.new(0.15), {Color = theme.cardBorderHover})
+				end)
+				ddBox.MouseLeave:Connect(function()
+					tween(ddBoxStroke, TweenInfo.new(0.15), {Color = theme.cardBorder})
 				end)
 
 				updateOptions()
@@ -967,7 +992,7 @@ function clickGui:CreateWindow(config)
 				label.Font = fonts.medium
 				label.Text = tName
 				label.TextColor3 = theme.text
-				label.TextSize = 11
+				label.TextSize = 11.5
 				label.TextXAlignment = Enum.TextXAlignment.Left
 				label.Parent = textWrap
 
@@ -1012,8 +1037,8 @@ function clickGui:CreateWindow(config)
 					local targetColor = val and theme.accent or theme.switchOff
 					local targetKnobPos = val and UDim2.new(1, -11, 0.5, -4.5) or UDim2.new(0, 2, 0.5, -4.5)
 
-					tween(miniSwitch, TweenInfo.new(0.18), {BackgroundColor3 = targetColor})
-					tween(switchKnob, TweenInfo.new(0.18), {Position = targetKnobPos})
+					tween(miniSwitch, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {BackgroundColor3 = targetColor})
+					tween(switchKnob, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = targetKnobPos})
 
 					if not silent and tCallback then
 						tCallback(val)
@@ -1062,7 +1087,7 @@ function clickGui:CreateWindow(config)
 				nameLabel.Font = fonts.medium
 				nameLabel.Text = sName
 				nameLabel.TextColor3 = theme.text
-				nameLabel.TextSize = 11
+				nameLabel.TextSize = 11.5
 				nameLabel.TextXAlignment = Enum.TextXAlignment.Left
 				nameLabel.Parent = headerRow
 
@@ -1072,7 +1097,7 @@ function clickGui:CreateWindow(config)
 				valueLabel.BackgroundTransparency = 1
 				valueLabel.Font = fonts.medium
 				valueLabel.TextColor3 = theme.accentLight
-				valueLabel.TextSize = 11
+				valueLabel.TextSize = 11.5
 				valueLabel.TextXAlignment = Enum.TextXAlignment.Right
 				valueLabel.Parent = headerRow
 
@@ -1222,7 +1247,7 @@ function clickGui:CreateWindow(config)
 
 				local btnStroke = Instance.new("UIStroke")
 				btnStroke.Color = theme.cardBorder
-				btnStroke.Thickness = 1
+				btnStroke.Thickness = 1.1
 				btnStroke.Parent = btn
 
 				if bDesc ~= "" then
@@ -1278,7 +1303,7 @@ function clickGui:CreateWindow(config)
 				label.Font = fonts.medium
 				label.Text = kName
 				label.TextColor3 = theme.text
-				label.TextSize = 11
+				label.TextSize = 11.5
 				label.TextXAlignment = Enum.TextXAlignment.Left
 				label.Parent = textWrap
 
@@ -1308,7 +1333,7 @@ function clickGui:CreateWindow(config)
 
 				local pillStroke = Instance.new("UIStroke")
 				pillStroke.Color = theme.cardBorder
-				pillStroke.Thickness = 1
+				pillStroke.Thickness = 1.1
 				pillStroke.Parent = pill
 
 				local pillIcon = Instance.new("ImageLabel")
@@ -1377,7 +1402,7 @@ function clickGui:CreateWindow(config)
 				label.Font = fonts.medium
 				label.Text = rName
 				label.TextColor3 = theme.text
-				label.TextSize = 11
+				label.TextSize = 11.5
 				label.TextXAlignment = Enum.TextXAlignment.Left
 				label.Parent = rowFrame
 
@@ -1438,7 +1463,7 @@ function clickGui:Notify(config)
 	local nStroke = Instance.new("UIStroke")
 	nStroke.Color = theme.cardBorder
 	nStroke.Transparency = 1
-	nStroke.Thickness = 1
+	nStroke.Thickness = 1.1
 	nStroke.Parent = notifyFrame
 
 	local nIconImg = Instance.new("ImageLabel")
@@ -1474,18 +1499,18 @@ function clickGui:Notify(config)
 	nDescLabel.TextTransparency = 1
 	nDescLabel.Parent = notifyFrame
 
-	tween(notifyFrame, TweenInfo.new(0.25), {BackgroundTransparency = 0})
-	tween(nStroke, TweenInfo.new(0.25), {Transparency = 0})
-	tween(nIconImg, TweenInfo.new(0.25), {ImageTransparency = 0})
-	tween(nTitleLabel, TweenInfo.new(0.25), {TextTransparency = 0})
-	tween(nDescLabel, TweenInfo.new(0.25), {TextTransparency = 0})
+	tween(notifyFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {BackgroundTransparency = 0})
+	tween(nStroke, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Transparency = 0})
+	tween(nIconImg, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {ImageTransparency = 0})
+	tween(nTitleLabel, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {TextTransparency = 0})
+	tween(nDescLabel, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {TextTransparency = 0})
 
 	task.delay(nDuration, function()
-		tween(notifyFrame, TweenInfo.new(0.25), {BackgroundTransparency = 1})
-		tween(nStroke, TweenInfo.new(0.25), {Transparency = 1})
-		tween(nIconImg, TweenInfo.new(0.25), {ImageTransparency = 1})
-		tween(nTitleLabel, TweenInfo.new(0.25), {TextTransparency = 1})
-		local hideTween = tween(nDescLabel, TweenInfo.new(0.25), {TextTransparency = 1})
+		tween(notifyFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {BackgroundTransparency = 1})
+		tween(nStroke, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Transparency = 1})
+		tween(nIconImg, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {ImageTransparency = 1})
+		tween(nTitleLabel, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {TextTransparency = 1})
+		local hideTween = tween(nDescLabel, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {TextTransparency = 1})
 		hideTween.Completed:Connect(function()
 			notifyFrame:Destroy()
 		end)
