@@ -11,124 +11,110 @@ local clickGui = {
 	activeTab = 1,
 	tabs = {},
 	notifications = {},
+	favorites = {},
 	modules = {}
 }
 
 local theme = {
 	bg = Color3.fromRGB(15, 16, 22),
-	topbar = Color3.fromRGB(13, 14, 20),
-	tabBar = Color3.fromRGB(19, 21, 29),
+	topbar = Color3.fromRGB(12, 13, 19),
+	tabBar = Color3.fromRGB(18, 20, 28),
 	card = Color3.fromRGB(22, 24, 33),
-	cardBorder = Color3.fromRGB(42, 47, 64),
-	cardBorderHover = Color3.fromRGB(60, 68, 92),
+	cardBorder = Color3.fromRGB(44, 49, 66),
+	cardBorderHover = Color3.fromRGB(70, 78, 105),
 	element = Color3.fromRGB(28, 31, 43),
-	elementHover = Color3.fromRGB(38, 43, 60),
+	elementHover = Color3.fromRGB(36, 41, 56),
 	dropdownBg = Color3.fromRGB(18, 20, 28),
 	dropdownItemHover = Color3.fromRGB(29, 33, 46),
-	dropdownItemSelected = Color3.fromRGB(34, 39, 54),
+	dropdownItemSelected = Color3.fromRGB(36, 41, 58),
 	accent = Color3.fromRGB(124, 92, 252),
 	accentLight = Color3.fromRGB(111, 124, 247),
-	accentHover = Color3.fromRGB(140, 110, 255),
-	text = Color3.fromRGB(242, 244, 250),
-	textMuted = Color3.fromRGB(165, 170, 188),
-	textDesc = Color3.fromRGB(110, 116, 136),
-	textDark = Color3.fromRGB(80, 86, 108),
-	switchOff = Color3.fromRGB(38, 42, 58),
+	accentHover = Color3.fromRGB(145, 115, 255),
+	text = Color3.fromRGB(245, 246, 252),
+	textMuted = Color3.fromRGB(170, 175, 192),
+	textDesc = Color3.fromRGB(115, 120, 140),
+	textDark = Color3.fromRGB(85, 90, 112),
+	switchOff = Color3.fromRGB(40, 44, 60),
 	switchKnob = Color3.fromRGB(255, 255, 255),
 	starActive = Color3.fromRGB(255, 208, 66),
-	starInactive = Color3.fromRGB(70, 76, 98),
+	starInactive = Color3.fromRGB(80, 86, 108),
 	sliderTrack = Color3.fromRGB(34, 38, 52)
 }
 
 local fonts = {
-	bold = Enum.Font.GothamBold,
-	medium = Enum.Font.GothamMedium,
-	regular = Enum.Font.Gotham
+	bold = Enum.Font.BuilderSansBold,
+	medium = Enum.Font.BuilderSansMedium,
+	regular = Enum.Font.BuilderSans
 }
 
-local lucideSprites = {
-	["48px"] = {
-		swords = {16898613777, {48, 48}, {967, 759}},
-		sword = {16898613777, {48, 48}, {967, 759}},
-		feather = {16898613353, {48, 48}, {771, 98}},
-		user = {16898613869, {48, 48}, {661, 869}},
-		["user-round"] = {16898613869, {48, 48}, {661, 869}},
-		users = {16898613869, {48, 48}, {612, 918}},
-		eye = {16898613353, {48, 48}, {771, 759}},
-		globe = {16898613509, {48, 48}, {257, 820}},
-		folder = {16898613353, {48, 48}, {612, 967}},
-		settings = {16898613777, {48, 48}, {404, 771}},
-		sliders = {16898613777, {48, 48}, {404, 771}},
-		["sliders-horizontal"] = {16898613777, {48, 48}, {820, 355}},
-		["volume-2"] = {16898613869, {48, 48}, {710, 869}},
-		["volume-1"] = {16898613869, {48, 48}, {820, 759}},
-		speaker = {16898613777, {48, 48}, {869, 98}},
-		star = {16898613777, {48, 48}, {612, 967}},
-		key = {16898613509, {48, 48}, {869, 404}},
-		["list-filter"] = {16898613509, {48, 48}, {710, 918}},
-		filter = {16898613509, {48, 48}, {710, 918}},
-		check = {16898612819, {48, 48}, {918, 661}},
-		["chevron-down"] = {16898612819, {48, 48}, {918, 196}},
-		["chevron-up"] = {16898612819, {48, 48}, {710, 918}},
-		["chevron-left"] = {16898612819, {48, 48}, {404, 967}},
-		["chevron-right"] = {16898612819, {48, 48}, {967, 661}},
-		columns = {16898613044, {48, 48}, {661, 820}},
-		split = {16898613044, {48, 48}, {661, 820}},
-		search = {16898613699, {48, 48}, {918, 857}},
-		languages = {16898613509, {48, 48}, {820, 196}},
-		bell = {16898612629, {48, 48}, {869, 147}},
-		["layout-grid"] = {16898613509, {48, 48}, {918, 404}},
-		box = {16898612819, {48, 48}, {196, 771}},
-		diamond = {16898613777, {48, 48}, {967, 0}},
-		rhombus = {16898613777, {48, 48}, {967, 0}},
-		sparkles = {16898613777, {48, 48}, {967, 0}},
-		shield = {16898613777, {48, 48}, {820, 257}},
-		zap = {16898613869, {48, 48}, {918, 906}},
-		crosshair = {16898613044, {48, 48}, {514, 967}},
-		target = {16898613044, {48, 48}, {514, 967}},
-		activity = {16898612629, {48, 48}, {771, 514}},
-		lock = {16898613509, {48, 48}, {869, 404}},
-		unlock = {16898613869, {48, 48}, {771, 710}},
-		trash = {16898613869, {48, 48}, {257, 918}},
-		plus = {16898613699, {48, 48}, {257, 918}},
-		minus = {16898613613, {48, 48}, {771, 196}},
-		x = {16898613869, {48, 48}, {869, 906}},
-		flame = {16898613353, {48, 48}, {967, 306}},
-		heart = {16898613509, {48, 48}, {869, 563}}
-	}
-}
-
-task.spawn(function()
-	pcall(function()
-		local content = game:HttpGet("https://raw.githubusercontent.com/latte-soft/lucide-roblox/master/lib/Icons.luau")
-		if content and #content > 500 then
-			local loaded = loadstring(content)()
-			if type(loaded) == "table" and loaded["48px"] then
-				for k, v in pairs(loaded["48px"]) do
-					lucideSprites["48px"][k] = v
-				end
-			end
-		end
-	end)
+local successFont, _ = pcall(function()
+	local lbl = Instance.new("TextLabel")
+	lbl.Font = fonts.bold
 end)
+if not successFont then
+	fonts.bold = Enum.Font.GothamBold
+	fonts.medium = Enum.Font.GothamMedium
+	fonts.regular = Enum.Font.Gotham
+end
+
+local directIcons = {
+	["star"] = "rbxassetid://10734953649",
+	["star-filled"] = "rbxassetid://10734953841",
+	["volume-2"] = "rbxassetid://10747375434",
+	["speaker"] = "rbxassetid://10747375434",
+	["chevron-down"] = "rbxassetid://10709790948",
+	["chevron-up"] = "rbxassetid://10709791523",
+	["chevron-left"] = "rbxassetid://10709790884",
+	["chevron-right"] = "rbxassetid://10709791008",
+	["list-filter"] = "rbxassetid://10709791143",
+	["filter"] = "rbxassetid://10709791143",
+	["key"] = "rbxassetid://10723414352",
+	["check"] = "rbxassetid://10709790644",
+	["diamond"] = "rbxassetid://10734953491",
+	["rhombus"] = "rbxassetid://10734953491",
+	["sliders-horizontal"] = "rbxassetid://10734952479",
+	["sliders"] = "rbxassetid://10734952479",
+	["swords"] = "rbxassetid://10709791437",
+	["sword"] = "rbxassetid://10709791437",
+	["shield"] = "rbxassetid://10723415903",
+	["user"] = "rbxassetid://10747373176",
+	["feather"] = "rbxassetid://10723387643",
+	["eye"] = "rbxassetid://10723387563",
+	["folder"] = "rbxassetid://10723387841",
+	["search"] = "rbxassetid://10734923549",
+	["languages"] = "rbxassetid://10723387971",
+	["bell"] = "rbxassetid://10709790426",
+	["split"] = "rbxassetid://10709791281",
+	["columns"] = "rbxassetid://10709791281",
+	["layout-grid"] = "rbxassetid://10709790575",
+	["box"] = "rbxassetid://10709790575",
+	["zap"] = "rbxassetid://10734954201",
+	["bot"] = "rbxassetid://10709790487",
+	["repeat"] = "rbxassetid://10734950382",
+	["flame"] = "rbxassetid://10723387721",
+	["heart"] = "rbxassetid://10723395402",
+	["sparkles"] = "rbxassetid://10734953491",
+	["trash"] = "rbxassetid://10747373105",
+	["lock"] = "rbxassetid://10723414827",
+	["crosshair"] = "rbxassetid://10709791053"
+}
 
 function clickGui.applyIcon(imageObj, iconName)
 	if not iconName or iconName == "" then
 		iconName = "box"
 	end
 
+	imageObj.ImageRectOffset = Vector2.new(0, 0)
+	imageObj.ImageRectSize = Vector2.new(0, 0)
+
 	if type(iconName) == "number" or string.match(tostring(iconName), "^%d+$") then
 		imageObj.Image = "rbxassetid://" .. tostring(iconName)
-		imageObj.ImageRectOffset = Vector2.new(0, 0)
-		imageObj.ImageRectSize = Vector2.new(0, 0)
 		return
 	end
 
 	local str = tostring(iconName)
 	if string.sub(str, 1, 13) == "rbxassetid://" or string.sub(str, 1, 4) == "http" then
 		imageObj.Image = str
-		imageObj.ImageRectOffset = Vector2.new(0, 0)
-		imageObj.ImageRectSize = Vector2.new(0, 0)
 		return
 	end
 
@@ -137,15 +123,10 @@ function clickGui.applyIcon(imageObj, iconName)
 		clean = string.sub(clean, 8)
 	end
 
-	local spriteData = lucideSprites["48px"][clean]
-	if spriteData then
-		imageObj.Image = "rbxassetid://" .. tostring(spriteData[1])
-		imageObj.ImageRectSize = Vector2.new(spriteData[2][1], spriteData[2][2])
-		imageObj.ImageRectOffset = Vector2.new(spriteData[3][1], spriteData[3][2])
+	if directIcons[clean] then
+		imageObj.Image = directIcons[clean]
 	else
-		imageObj.Image = "rbxassetid://16898612819"
-		imageObj.ImageRectSize = Vector2.new(48, 48)
-		imageObj.ImageRectOffset = Vector2.new(196, 771)
+		imageObj.Image = "rbxassetid://10709790575"
 	end
 end
 
@@ -231,8 +212,8 @@ function clickGui:CreateWindow(config)
 
 	local mainFrame = Instance.new("Frame")
 	mainFrame.Name = "MainFrame"
-	mainFrame.Size = UDim2.new(0, 890, 0, 540)
-	mainFrame.Position = UDim2.new(0.5, -445, 0.5, -270)
+	mainFrame.Size = UDim2.new(0, 900, 0, 540)
+	mainFrame.Position = UDim2.new(0.5, -450, 0.5, -270)
 	mainFrame.BackgroundColor3 = theme.bg
 	mainFrame.BorderSizePixel = 0
 	mainFrame.ClipsDescendants = false
@@ -244,7 +225,7 @@ function clickGui:CreateWindow(config)
 
 	local mainStroke = Instance.new("UIStroke")
 	mainStroke.Color = theme.cardBorder
-	mainStroke.Thickness = 1.2
+	mainStroke.Thickness = 1.3
 	mainStroke.Parent = mainFrame
 
 	local topBar = Instance.new("Frame")
@@ -290,8 +271,8 @@ function clickGui:CreateWindow(config)
 
 	local tabList = Instance.new("Frame")
 	tabList.Name = "TabList"
-	tabList.Size = UDim2.new(0, 350, 0, 30)
-	tabList.Position = UDim2.new(0.5, -175, 0.5, -15)
+	tabList.Size = UDim2.new(0, 340, 0, 30)
+	tabList.Position = UDim2.new(0.5, -170, 0.5, -15)
 	tabList.BackgroundColor3 = theme.tabBar
 	tabList.BorderSizePixel = 0
 	tabList.Parent = topBar
@@ -343,17 +324,17 @@ function clickGui:CreateWindow(config)
 		utilButton.Parent = utilityContainer
 
 		utilButton.MouseEnter:Connect(function()
-			tween(utilButton, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {ImageColor3 = theme.text})
+			tween(utilButton, TweenInfo.new(0.18, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {ImageColor3 = theme.text})
 		end)
 		utilButton.MouseLeave:Connect(function()
-			tween(utilButton, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {ImageColor3 = theme.textDark})
+			tween(utilButton, TweenInfo.new(0.18, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {ImageColor3 = theme.textDark})
 		end)
 	end
 
 	local contentContainer = Instance.new("Frame")
 	contentContainer.Name = "ContentContainer"
-	contentContainer.Size = UDim2.new(1, -24, 1, -62)
-	contentContainer.Position = UDim2.new(0, 12, 0, 54)
+	contentContainer.Size = UDim2.new(1, -20, 1, -60)
+	contentContainer.Position = UDim2.new(0, 10, 0, 52)
 	contentContainer.BackgroundTransparency = 1
 	contentContainer.Parent = mainFrame
 
@@ -435,14 +416,23 @@ function clickGui:CreateWindow(config)
 		columnsContainer.BackgroundTransparency = 1
 		columnsContainer.Parent = tabPage
 
-		local columnWidth = math.floor((890 - 24 - 24) / 3)
+		local colPadding = Instance.new("UIPadding")
+		colPadding.PaddingLeft = UDim.new(0, 4)
+		colPadding.PaddingRight = UDim.new(0, 4)
+		colPadding.PaddingTop = UDim.new(0, 4)
+		colPadding.PaddingBottom = UDim.new(0, 12)
+		colPadding.Parent = columnsContainer
+
+		local totalUsableWidth = 900 - 20 - 8
+		local gap = 12
+		local columnWidth = math.floor((totalUsableWidth - (gap * 2)) / 3)
 
 		local columns = {}
 		for colIdx = 1, 3 do
 			local col = Instance.new("Frame")
 			col.Name = "Column_" .. colIdx
 			col.Size = UDim2.new(0, columnWidth, 1, 0)
-			col.Position = UDim2.new(0, (colIdx - 1) * (columnWidth + 12), 0, 0)
+			col.Position = UDim2.new(0, (colIdx - 1) * (columnWidth + gap), 0, 0)
 			col.BackgroundTransparency = 1
 			col.AutomaticSize = Enum.AutomaticSize.Y
 			col.Parent = columnsContainer
@@ -521,7 +511,7 @@ function clickGui:CreateWindow(config)
 
 			local cardStroke = Instance.new("UIStroke")
 			cardStroke.Color = theme.cardBorder
-			cardStroke.Thickness = 1.1
+			cardStroke.Thickness = 1.2
 			cardStroke.Parent = cardFrame
 
 			local cardPadding = Instance.new("UIPadding")
@@ -535,7 +525,7 @@ function clickGui:CreateWindow(config)
 			cardLayout.FillDirection = Enum.FillDirection.Vertical
 			cardLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 			cardLayout.SortOrder = Enum.SortOrder.LayoutOrder
-			cardLayout.Padding = UDim.new(0, 10)
+			cardLayout.Padding = UDim.new(0, 8)
 			cardLayout.Parent = cardFrame
 
 			local itemOrder = 0
@@ -600,7 +590,12 @@ function clickGui:CreateWindow(config)
 
 			starBtn.MouseButton1Click:Connect(function()
 				modFavorite = not modFavorite
-				tween(starBtn, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+				if modFavorite then
+					clickGui.favorites[modName] = true
+				else
+					clickGui.favorites[modName] = nil
+				end
+				tween(starBtn, TweenInfo.new(0.2, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
 					ImageColor3 = modFavorite and theme.starActive or theme.starInactive
 				})
 			end)
@@ -626,7 +621,7 @@ function clickGui:CreateWindow(config)
 			bindIcon.Position = UDim2.new(0, 4, 0.5, -5)
 			bindIcon.BackgroundTransparency = 1
 			clickGui.applyIcon(bindIcon, "key")
-			bindIcon.ImageColor3 = theme.textDark
+			bindIcon.ImageColor3 = theme.textMuted
 			bindIcon.Parent = bindBtn
 
 			local bindLabel = Instance.new("TextLabel")
@@ -635,7 +630,7 @@ function clickGui:CreateWindow(config)
 			bindLabel.BackgroundTransparency = 1
 			bindLabel.Font = fonts.medium
 			bindLabel.Text = (modBind == Enum.KeyCode.None) and "None" or modBind.Name
-			bindLabel.TextColor3 = theme.textDark
+			bindLabel.TextColor3 = Color3.fromRGB(240, 240, 245)
 			bindLabel.TextSize = 9.5
 			bindLabel.TextXAlignment = Enum.TextXAlignment.Center
 			bindLabel.TextTruncate = Enum.TextTruncate.AtEnd
@@ -658,7 +653,7 @@ function clickGui:CreateWindow(config)
 							modBind = input.KeyCode
 							bindLabel.Text = input.KeyCode.Name
 						end
-						bindLabel.TextColor3 = theme.textDark
+						bindLabel.TextColor3 = Color3.fromRGB(240, 240, 245)
 						isBinding = false
 						conn:Disconnect()
 					end
@@ -1188,6 +1183,7 @@ function clickGui:CreateWindow(config)
 				track.InputBegan:Connect(function(input)
 					if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 						dragging = true
+						tween(knob, TweenInfo.new(0.12), {Size = UDim2.new(0, 10, 0, 10)})
 						updateSlider(input)
 					end
 				end)
@@ -1195,6 +1191,7 @@ function clickGui:CreateWindow(config)
 				UserInputService.InputEnded:Connect(function(input)
 					if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 						dragging = false
+						tween(knob, TweenInfo.new(0.12), {Size = UDim2.new(0, 8, 0, 8)})
 					end
 				end)
 
@@ -1341,7 +1338,7 @@ function clickGui:CreateWindow(config)
 				pillIcon.Position = UDim2.new(0, 4, 0.5, -5)
 				pillIcon.BackgroundTransparency = 1
 				clickGui.applyIcon(pillIcon, "key")
-				pillIcon.ImageColor3 = theme.textDark
+				pillIcon.ImageColor3 = theme.textMuted
 				pillIcon.Parent = pill
 
 				local pillLabel = Instance.new("TextLabel")
@@ -1350,7 +1347,7 @@ function clickGui:CreateWindow(config)
 				pillLabel.BackgroundTransparency = 1
 				pillLabel.Font = fonts.medium
 				pillLabel.Text = (kDef == Enum.KeyCode.None) and "None" or kDef.Name
-				pillLabel.TextColor3 = theme.textDark
+				pillLabel.TextColor3 = Color3.fromRGB(240, 240, 245)
 				pillLabel.TextSize = 9.5
 				pillLabel.TextXAlignment = Enum.TextXAlignment.Center
 				pillLabel.TextTruncate = Enum.TextTruncate.AtEnd
@@ -1373,54 +1370,13 @@ function clickGui:CreateWindow(config)
 								kDef = input.KeyCode
 								pillLabel.Text = input.KeyCode.Name
 							end
-							pillLabel.TextColor3 = theme.textDark
+							pillLabel.TextColor3 = Color3.fromRGB(240, 240, 245)
 							listening = false
 							conn:Disconnect()
 							kCallback(kDef)
 						end
 					end)
 				end)
-			end
-
-			function moduleObject:AddActionRow(opt)
-				opt = opt or {}
-				local rName = opt.name or "Row"
-				local rIcon = opt.icon or "sliders-horizontal"
-				local rCallback = opt.callback or function() end
-
-				itemOrder = itemOrder + 1
-
-				local rowFrame = Instance.new("Frame")
-				rowFrame.Size = UDim2.new(1, 0, 0, 20)
-				rowFrame.BackgroundTransparency = 1
-				rowFrame.LayoutOrder = itemOrder
-				rowFrame.Parent = cardFrame
-
-				local label = Instance.new("TextLabel")
-				label.Size = UDim2.new(1, -24, 1, 0)
-				label.BackgroundTransparency = 1
-				label.Font = fonts.medium
-				label.Text = rName
-				label.TextColor3 = theme.text
-				label.TextSize = 11.5
-				label.TextXAlignment = Enum.TextXAlignment.Left
-				label.Parent = rowFrame
-
-				local actionBtn = Instance.new("ImageButton")
-				actionBtn.Size = UDim2.new(0, 14, 0, 14)
-				actionBtn.Position = UDim2.new(1, -14, 0.5, -7)
-				actionBtn.BackgroundTransparency = 1
-				clickGui.applyIcon(actionBtn, rIcon)
-				actionBtn.ImageColor3 = theme.textDesc
-				actionBtn.Parent = rowFrame
-
-				actionBtn.MouseEnter:Connect(function()
-					tween(actionBtn, TweenInfo.new(0.15), {ImageColor3 = theme.text})
-				end)
-				actionBtn.MouseLeave:Connect(function()
-					tween(actionBtn, TweenInfo.new(0.15), {ImageColor3 = theme.textDesc})
-				end)
-				actionBtn.MouseButton1Click:Connect(rCallback)
 			end
 
 			return moduleObject
@@ -1433,7 +1389,22 @@ function clickGui:CreateWindow(config)
 	UserInputService.InputBegan:Connect(function(input, gameProcessed)
 		if not gameProcessed and input.KeyCode == clickGui.toggleKey then
 			clickGui.open = not clickGui.open
-			mainFrame.Visible = clickGui.open
+			if clickGui.open then
+				mainFrame.Visible = true
+				mainFrame.Size = UDim2.new(0, 870, 0, 520)
+				tween(mainFrame, TweenInfo.new(0.25, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+					Size = UDim2.new(0, 900, 0, 540)
+				})
+			else
+				local tw = tween(mainFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+					Size = UDim2.new(0, 870, 0, 520)
+				})
+				tw.Completed:Connect(function()
+					if not clickGui.open then
+						mainFrame.Visible = false
+					end
+				end)
+			end
 		end
 	end)
 
