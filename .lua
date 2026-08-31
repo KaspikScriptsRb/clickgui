@@ -15,30 +15,27 @@ local clickGui = {
 }
 
 local theme = {
-	bg = Color3.fromRGB(15, 16, 21),
-	topbar = Color3.fromRGB(12, 13, 17),
-	tabBar = Color3.fromRGB(19, 21, 28),
-	card = Color3.fromRGB(22, 24, 32),
-	cardBorder = Color3.fromRGB(34, 38, 50),
-	element = Color3.fromRGB(28, 31, 42),
-	elementHover = Color3.fromRGB(36, 40, 54),
-	dropdownBg = Color3.fromRGB(19, 21, 28),
-	dropdownItemHover = Color3.fromRGB(28, 31, 42),
-	dropdownItemSelected = Color3.fromRGB(33, 37, 50),
+	bg = Color3.fromRGB(15, 16, 22),
+	topbar = Color3.fromRGB(13, 14, 19),
+	tabBar = Color3.fromRGB(18, 20, 27),
+	card = Color3.fromRGB(21, 23, 31),
+	cardBorder = Color3.fromRGB(32, 35, 47),
+	element = Color3.fromRGB(26, 29, 39),
+	elementHover = Color3.fromRGB(34, 38, 52),
+	dropdownBg = Color3.fromRGB(17, 19, 26),
+	dropdownItemHover = Color3.fromRGB(26, 29, 40),
+	dropdownItemSelected = Color3.fromRGB(30, 34, 46),
 	accent = Color3.fromRGB(124, 92, 252),
 	accentLight = Color3.fromRGB(111, 124, 247),
-	accentGlow = Color3.fromRGB(140, 110, 255),
-	text = Color3.fromRGB(245, 245, 250),
-	textMuted = Color3.fromRGB(180, 185, 200),
-	textDesc = Color3.fromRGB(125, 130, 148),
-	textDark = Color3.fromRGB(90, 95, 115),
-	switchOff = Color3.fromRGB(38, 42, 56),
+	text = Color3.fromRGB(240, 242, 248),
+	textMuted = Color3.fromRGB(160, 165, 180),
+	textDesc = Color3.fromRGB(105, 110, 128),
+	textDark = Color3.fromRGB(75, 80, 100),
+	switchOff = Color3.fromRGB(36, 40, 54),
 	switchKnob = Color3.fromRGB(255, 255, 255),
 	starActive = Color3.fromRGB(255, 208, 66),
-	starInactive = Color3.fromRGB(75, 80, 100),
-	sliderTrack = Color3.fromRGB(34, 38, 52),
-	sliderThumb = Color3.fromRGB(124, 92, 252),
-	sliderThumbBorder = Color3.fromRGB(255, 255, 255)
+	starInactive = Color3.fromRGB(65, 70, 90),
+	sliderTrack = Color3.fromRGB(32, 36, 48)
 }
 
 local fonts = {
@@ -68,7 +65,7 @@ local lucideSprites = {
 		key = {16898613509, {48, 48}, {869, 404}},
 		["list-filter"] = {16898613509, {48, 48}, {710, 918}},
 		filter = {16898613509, {48, 48}, {710, 918}},
-		check = {16898612819, {48, 48},{918, 661}},
+		check = {16898612819, {48, 48}, {918, 661}},
 		["chevron-down"] = {16898612819, {48, 48}, {918, 196}},
 		["chevron-up"] = {16898612819, {48, 48}, {710, 918}},
 		["chevron-left"] = {16898612819, {48, 48}, {404, 967}},
@@ -81,6 +78,7 @@ local lucideSprites = {
 		["layout-grid"] = {16898613509, {48, 48}, {918, 404}},
 		box = {16898612819, {48, 48}, {196, 771}},
 		diamond = {16898613777, {48, 48}, {967, 0}},
+		rhombus = {16898613777, {48, 48}, {967, 0}},
 		sparkles = {16898613777, {48, 48}, {967, 0}},
 		shield = {16898613777, {48, 48}, {820, 257}},
 		zap = {16898613869, {48, 48}, {918, 906}},
@@ -231,8 +229,8 @@ function clickGui:CreateWindow(config)
 
 	local mainFrame = Instance.new("Frame")
 	mainFrame.Name = "MainFrame"
-	mainFrame.Size = UDim2.new(0, 900, 0, 560)
-	mainFrame.Position = UDim2.new(0.5, -450, 0.5, -280)
+	mainFrame.Size = UDim2.new(0, 880, 0, 540)
+	mainFrame.Position = UDim2.new(0.5, -440, 0.5, -270)
 	mainFrame.BackgroundColor3 = theme.bg
 	mainFrame.BorderSizePixel = 0
 	mainFrame.ClipsDescendants = false
@@ -281,8 +279,8 @@ function clickGui:CreateWindow(config)
 	logoContainer.Parent = topBar
 
 	local logoImage = Instance.new("ImageLabel")
-	logoImage.Size = UDim2.new(0, 20, 0, 20)
-	logoImage.Position = UDim2.new(0, 18, 0.5, -10)
+	logoImage.Size = UDim2.new(0, 18, 0, 18)
+	logoImage.Position = UDim2.new(0, 18, 0.5, -9)
 	logoImage.BackgroundTransparency = 1
 	clickGui.applyIcon(logoImage, logoIcon)
 	logoImage.ImageColor3 = theme.accent
@@ -290,18 +288,18 @@ function clickGui:CreateWindow(config)
 
 	local tabList = Instance.new("Frame")
 	tabList.Name = "TabList"
-	tabList.Size = UDim2.new(0, 360, 0, 32)
-	tabList.Position = UDim2.new(0.5, -180, 0.5, -16)
+	tabList.Size = UDim2.new(0, 340, 0, 30)
+	tabList.Position = UDim2.new(0.5, -170, 0.5, -15)
 	tabList.BackgroundColor3 = theme.tabBar
 	tabList.BorderSizePixel = 0
 	tabList.Parent = topBar
 
 	local tabListCorner = Instance.new("UICorner")
-	tabListCorner.CornerRadius = UDim.new(0, 8)
+	tabListCorner.CornerRadius = UDim.new(0, 6)
 	tabListCorner.Parent = tabList
 
 	local tabListStroke = Instance.new("UIStroke")
-	tabListStroke.Color = Color3.fromRGB(30, 33, 44)
+	tabListStroke.Color = Color3.fromRGB(28, 31, 42)
 	tabListStroke.Thickness = 1
 	tabListStroke.Parent = tabList
 
@@ -336,7 +334,7 @@ function clickGui:CreateWindow(config)
 
 	for _, util in ipairs(utilityIcons) do
 		local utilButton = Instance.new("ImageButton")
-		utilButton.Size = UDim2.new(0, 16, 0, 16)
+		utilButton.Size = UDim2.new(0, 15, 0, 15)
 		utilButton.BackgroundTransparency = 1
 		clickGui.applyIcon(utilButton, util.icon)
 		utilButton.ImageColor3 = theme.textDark
@@ -352,15 +350,15 @@ function clickGui:CreateWindow(config)
 
 	local contentContainer = Instance.new("Frame")
 	contentContainer.Name = "ContentContainer"
-	contentContainer.Size = UDim2.new(1, -24, 1, -64)
-	contentContainer.Position = UDim2.new(0, 12, 0, 56)
+	contentContainer.Size = UDim2.new(1, -24, 1, -62)
+	contentContainer.Position = UDim2.new(0, 12, 0, 54)
 	contentContainer.BackgroundTransparency = 1
 	contentContainer.Parent = mainFrame
 
 	local notifyContainer = Instance.new("Frame")
 	notifyContainer.Name = "NotifyContainer"
-	notifyContainer.Size = UDim2.new(0, 280, 1, -20)
-	notifyContainer.Position = UDim2.new(1, -290, 0, 10)
+	notifyContainer.Size = UDim2.new(0, 260, 1, -20)
+	notifyContainer.Position = UDim2.new(1, -270, 0, 10)
 	notifyContainer.BackgroundTransparency = 1
 	notifyContainer.ZIndex = 100
 	notifyContainer.Parent = screenGui
@@ -390,15 +388,15 @@ function clickGui:CreateWindow(config)
 
 		local tabButton = Instance.new("TextButton")
 		tabButton.Name = "TabButton_" .. tabName
-		tabButton.Size = UDim2.new(0, 44, 0, 26)
+		tabButton.Size = UDim2.new(0, 42, 0, 26)
 		tabButton.BackgroundTransparency = 1
 		tabButton.Text = ""
 		tabButton.AutoButtonColor = false
 		tabButton.Parent = tabList
 
 		local tabIconImage = Instance.new("ImageLabel")
-		tabIconImage.Size = UDim2.new(0, 16, 0, 16)
-		tabIconImage.Position = UDim2.new(0.5, -8, 0.5, -9)
+		tabIconImage.Size = UDim2.new(0, 15, 0, 15)
+		tabIconImage.Position = UDim2.new(0.5, -7.5, 0.5, -8.5)
 		tabIconImage.BackgroundTransparency = 1
 		clickGui.applyIcon(tabIconImage, tabIcon)
 		tabIconImage.ImageColor3 = (tabIndex == 1) and theme.accent or theme.textDark
@@ -406,8 +404,8 @@ function clickGui:CreateWindow(config)
 
 		local activeLine = Instance.new("Frame")
 		activeLine.Name = "ActiveLine"
-		activeLine.Size = UDim2.new(0, 16, 0, 2)
-		activeLine.Position = UDim2.new(0.5, -8, 1, -2)
+		activeLine.Size = UDim2.new(0, 14, 0, 2)
+		activeLine.Position = UDim2.new(0.5, -7, 1, -2)
 		activeLine.BackgroundColor3 = theme.accent
 		activeLine.BorderSizePixel = 0
 		activeLine.Visible = (tabIndex == 1)
@@ -435,7 +433,7 @@ function clickGui:CreateWindow(config)
 		columnsContainer.BackgroundTransparency = 1
 		columnsContainer.Parent = tabPage
 
-		local columnWidth = math.floor((900 - 24 - 24) / 3)
+		local columnWidth = math.floor((880 - 24 - 24) / 3)
 
 		local columns = {}
 		for colIdx = 1, 3 do
@@ -450,6 +448,7 @@ function clickGui:CreateWindow(config)
 			local colLayout = Instance.new("UIListLayout")
 			colLayout.FillDirection = Enum.FillDirection.Vertical
 			colLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+			colLayout.SortOrder = Enum.SortOrder.LayoutOrder
 			colLayout.Padding = UDim.new(0, 12)
 			colLayout.Parent = col
 
@@ -531,13 +530,17 @@ function clickGui:CreateWindow(config)
 			local cardLayout = Instance.new("UIListLayout")
 			cardLayout.FillDirection = Enum.FillDirection.Vertical
 			cardLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+			cardLayout.SortOrder = Enum.SortOrder.LayoutOrder
 			cardLayout.Padding = UDim.new(0, 10)
 			cardLayout.Parent = cardFrame
+
+			local itemOrder = 0
 
 			local headerFrame = Instance.new("Frame")
 			headerFrame.Name = "Header"
 			headerFrame.Size = UDim2.new(1, 0, 0, 22)
 			headerFrame.BackgroundTransparency = 1
+			headerFrame.LayoutOrder = 0
 			headerFrame.Parent = cardFrame
 
 			local leftHeader = Instance.new("Frame")
@@ -565,7 +568,7 @@ function clickGui:CreateWindow(config)
 			titleLabel.Font = fonts.bold
 			titleLabel.Text = modName
 			titleLabel.TextColor3 = theme.text
-			titleLabel.TextSize = 13
+			titleLabel.TextSize = 12.5
 			titleLabel.TextXAlignment = Enum.TextXAlignment.Left
 			titleLabel.TextTruncate = Enum.TextTruncate.AtEnd
 			titleLabel.Parent = leftHeader
@@ -600,7 +603,7 @@ function clickGui:CreateWindow(config)
 
 			local bindBtn = Instance.new("TextButton")
 			bindBtn.Size = UDim2.new(0, 48, 0, 18)
-			bindBtn.BackgroundColor3 = Color3.fromRGB(28, 31, 42)
+			bindBtn.BackgroundColor3 = Color3.fromRGB(26, 29, 40)
 			bindBtn.Text = ""
 			bindBtn.AutoButtonColor = false
 			bindBtn.Parent = rightHeader
@@ -610,7 +613,7 @@ function clickGui:CreateWindow(config)
 			bindCorner.Parent = bindBtn
 
 			local bindStroke = Instance.new("UIStroke")
-			bindStroke.Color = Color3.fromRGB(38, 42, 56)
+			bindStroke.Color = Color3.fromRGB(36, 40, 54)
 			bindStroke.Thickness = 1
 			bindStroke.Parent = bindBtn
 
@@ -693,8 +696,8 @@ function clickGui:CreateWindow(config)
 				local targetColor = val and theme.accent or theme.switchOff
 				local targetKnobPos = val and UDim2.new(1, -14, 0.5, -6) or UDim2.new(0, 2, 0.5, -6)
 
-				tween(toggleSwitch, TweenInfo.new(0.2), {BackgroundColor3 = targetColor})
-				tween(switchKnob, TweenInfo.new(0.2), {Position = targetKnobPos})
+				tween(toggleSwitch, TweenInfo.new(0.18), {BackgroundColor3 = targetColor})
+				tween(switchKnob, TweenInfo.new(0.18), {Position = targetKnobPos})
 
 				if not silent and moduleObject.callback then
 					moduleObject.callback(val)
@@ -723,12 +726,16 @@ function clickGui:CreateWindow(config)
 				local dIcon = opt.icon or "list-filter"
 				local dList = opt.options or {}
 				local dSelected = opt.default or dList[1] or ""
+				local dIsOpen = opt.open or false
 				local dCallback = opt.callback or function() end
+
+				itemOrder = itemOrder + 1
 
 				local ddContainer = Instance.new("Frame")
 				ddContainer.Name = "Dropdown_" .. (dName ~= "" and dName or "Item")
 				ddContainer.Size = UDim2.new(1, 0, 0, 0)
 				ddContainer.BackgroundTransparency = 1
+				ddContainer.LayoutOrder = itemOrder
 				ddContainer.AutomaticSize = Enum.AutomaticSize.Y
 				ddContainer.Parent = cardFrame
 
@@ -744,7 +751,7 @@ function clickGui:CreateWindow(config)
 					ddLabel.Font = fonts.medium
 					ddLabel.Text = dName
 					ddLabel.TextColor3 = theme.text
-					ddLabel.TextSize = 11.5
+					ddLabel.TextSize = 11
 					ddLabel.TextXAlignment = Enum.TextXAlignment.Left
 					ddLabel.Parent = ddContainer
 				end
@@ -802,7 +809,7 @@ function clickGui:CreateWindow(config)
 				ddArrow.Size = UDim2.new(0, 11, 0, 11)
 				ddArrow.Position = UDim2.new(1, -18, 0.5, -5.5)
 				ddArrow.BackgroundTransparency = 1
-				clickGui.applyIcon(ddArrow, "chevron-down")
+				clickGui.applyIcon(ddArrow, dIsOpen and "chevron-up" or "chevron-down")
 				ddArrow.ImageColor3 = theme.textDesc
 				ddArrow.Parent = ddBox
 
@@ -812,7 +819,7 @@ function clickGui:CreateWindow(config)
 				ddListFrame.BackgroundColor3 = theme.dropdownBg
 				ddListFrame.BorderSizePixel = 0
 				ddListFrame.ClipsDescendants = true
-				ddListFrame.Visible = false
+				ddListFrame.Visible = dIsOpen
 				ddListFrame.AutomaticSize = Enum.AutomaticSize.Y
 				ddListFrame.Parent = ddContainer
 
@@ -837,7 +844,7 @@ function clickGui:CreateWindow(config)
 				listPadding.PaddingRight = UDim.new(0, 3)
 				listPadding.Parent = ddListFrame
 
-				local isOpen = false
+				local isOpen = dIsOpen
 
 				local function updateOptions()
 					for _, child in ipairs(ddListFrame:GetChildren()) do
@@ -934,10 +941,13 @@ function clickGui:CreateWindow(config)
 				local tState = opt.default or false
 				local tCallback = opt.callback or function() end
 
+				itemOrder = itemOrder + 1
+
 				local toggleRow = Instance.new("Frame")
 				toggleRow.Name = "Toggle_" .. tName
 				toggleRow.Size = UDim2.new(1, 0, 0, tDesc ~= "" and 30 or 20)
 				toggleRow.BackgroundTransparency = 1
+				toggleRow.LayoutOrder = itemOrder
 				toggleRow.Parent = cardFrame
 
 				local textWrap = Instance.new("Frame")
@@ -957,7 +967,7 @@ function clickGui:CreateWindow(config)
 				label.Font = fonts.medium
 				label.Text = tName
 				label.TextColor3 = theme.text
-				label.TextSize = 11.5
+				label.TextSize = 11
 				label.TextXAlignment = Enum.TextXAlignment.Left
 				label.Parent = textWrap
 
@@ -1032,10 +1042,13 @@ function clickGui:CreateWindow(config)
 				local sDecimals = opt.decimals or 0
 				local sCallback = opt.callback or function() end
 
+				itemOrder = itemOrder + 1
+
 				local sliderContainer = Instance.new("Frame")
 				sliderContainer.Name = "Slider_" .. sName
-				sliderContainer.Size = UDim2.new(1, 0, 0, sDesc ~= "" and 42 or 32)
+				sliderContainer.Size = UDim2.new(1, 0, 0, sDesc ~= "" and 42 or 30)
 				sliderContainer.BackgroundTransparency = 1
+				sliderContainer.LayoutOrder = itemOrder
 				sliderContainer.Parent = cardFrame
 
 				local headerRow = Instance.new("Frame")
@@ -1049,7 +1062,7 @@ function clickGui:CreateWindow(config)
 				nameLabel.Font = fonts.medium
 				nameLabel.Text = sName
 				nameLabel.TextColor3 = theme.text
-				nameLabel.TextSize = 11.5
+				nameLabel.TextSize = 11
 				nameLabel.TextXAlignment = Enum.TextXAlignment.Left
 				nameLabel.Parent = headerRow
 
@@ -1059,13 +1072,14 @@ function clickGui:CreateWindow(config)
 				valueLabel.BackgroundTransparency = 1
 				valueLabel.Font = fonts.medium
 				valueLabel.TextColor3 = theme.accentLight
-				valueLabel.TextSize = 11.5
+				valueLabel.TextSize = 11
 				valueLabel.TextXAlignment = Enum.TextXAlignment.Right
 				valueLabel.Parent = headerRow
 
 				local formatValue = function(val)
 					if sDecimals > 0 then
-						return string.format("%." .. sDecimals .. "f", val) .. sSuffix
+						local formatted = string.format("%." .. sDecimals .. "f", val)
+						return formatted .. sSuffix
 					else
 						return tostring(math.floor(val + 0.5)) .. sSuffix
 					end
@@ -1115,8 +1129,8 @@ function clickGui:CreateWindow(config)
 				fillCorner.Parent = fill
 
 				local knob = Instance.new("Frame")
-				knob.Size = UDim2.new(0, 9, 0, 9)
-				knob.Position = UDim2.new(initialPercent, -4.5, 0.5, -4.5)
+				knob.Size = UDim2.new(0, 8, 0, 8)
+				knob.Position = UDim2.new(initialPercent, -4, 0.5, -4)
 				knob.BackgroundColor3 = theme.bg
 				knob.BorderSizePixel = 0
 				knob.Parent = track
@@ -1141,7 +1155,7 @@ function clickGui:CreateWindow(config)
 					local finalVal = sDecimals > 0 and tonumber(string.format("%." .. sDecimals .. "f", rawVal)) or math.floor(rawVal + 0.5)
 
 					fill.Size = UDim2.new(percent, 0, 1, 0)
-					knob.Position = UDim2.new(percent, -4.5, 0.5, -4.5)
+					knob.Position = UDim2.new(percent, -4, 0.5, -4)
 					valueLabel.Text = formatValue(finalVal)
 					sCallback(finalVal)
 				end
@@ -1170,7 +1184,7 @@ function clickGui:CreateWindow(config)
 					val = math.clamp(val, sMin, sMax)
 					local percent = (val - sMin) / (sMax - sMin)
 					fill.Size = UDim2.new(percent, 0, 1, 0)
-					knob.Position = UDim2.new(percent, -4.5, 0.5, -4.5)
+					knob.Position = UDim2.new(percent, -4, 0.5, -4)
 					valueLabel.Text = formatValue(val)
 					sCallback(val)
 				end
@@ -1181,12 +1195,14 @@ function clickGui:CreateWindow(config)
 				opt = opt or {}
 				local bName = opt.name or "Button"
 				local bDesc = opt.description or ""
-				local bIcon = opt.icon or ""
 				local bCallback = opt.callback or function() end
+
+				itemOrder = itemOrder + 1
 
 				local btnWrap = Instance.new("Frame")
 				btnWrap.Size = UDim2.new(1, 0, 0, bDesc ~= "" and 38 or 26)
 				btnWrap.BackgroundTransparency = 1
+				btnWrap.LayoutOrder = itemOrder
 				btnWrap.Parent = cardFrame
 
 				local btn = Instance.new("TextButton")
@@ -1237,9 +1253,12 @@ function clickGui:CreateWindow(config)
 				local kDef = opt.default or Enum.KeyCode.None
 				local kCallback = opt.callback or function() end
 
+				itemOrder = itemOrder + 1
+
 				local keyRow = Instance.new("Frame")
 				keyRow.Size = UDim2.new(1, 0, 0, kDesc ~= "" and 30 or 20)
 				keyRow.BackgroundTransparency = 1
+				keyRow.LayoutOrder = itemOrder
 				keyRow.Parent = cardFrame
 
 				local textWrap = Instance.new("Frame")
@@ -1259,7 +1278,7 @@ function clickGui:CreateWindow(config)
 				label.Font = fonts.medium
 				label.Text = kName
 				label.TextColor3 = theme.text
-				label.TextSize = 11.5
+				label.TextSize = 11
 				label.TextXAlignment = Enum.TextXAlignment.Left
 				label.Parent = textWrap
 
@@ -1344,9 +1363,12 @@ function clickGui:CreateWindow(config)
 				local rIcon = opt.icon or "sliders-horizontal"
 				local rCallback = opt.callback or function() end
 
+				itemOrder = itemOrder + 1
+
 				local rowFrame = Instance.new("Frame")
 				rowFrame.Size = UDim2.new(1, 0, 0, 20)
 				rowFrame.BackgroundTransparency = 1
+				rowFrame.LayoutOrder = itemOrder
 				rowFrame.Parent = cardFrame
 
 				local label = Instance.new("TextLabel")
@@ -1355,7 +1377,7 @@ function clickGui:CreateWindow(config)
 				label.Font = fonts.medium
 				label.Text = rName
 				label.TextColor3 = theme.text
-				label.TextSize = 11.5
+				label.TextSize = 11
 				label.TextXAlignment = Enum.TextXAlignment.Left
 				label.Parent = rowFrame
 
