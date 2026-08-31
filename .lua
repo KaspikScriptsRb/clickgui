@@ -502,7 +502,7 @@ function clickGui:CreateWindow(config)
 		function tabObject:AddModule(moduleConfig)
 			moduleConfig = moduleConfig or {}
 			local modName = moduleConfig.name or "Module"
-			local modIcon = moduleConfig.icon or "volume-2"
+			local modIcon = moduleConfig.icon or "scroll"
 			local modState = moduleConfig.default or false
 			local modBind = moduleConfig.keybind or Enum.KeyCode.None
 			local modFavorite = moduleConfig.favorite or false
