@@ -21,12 +21,12 @@ local theme = {
 	tabBar = Color3.fromRGB(18, 20, 28),
 	card = Color3.fromRGB(22, 24, 33),
 	cardBorder = Color3.fromRGB(44, 49, 66),
-	cardBorderHover = Color3.fromRGB(70, 78, 105),
+	cardBorderHover = Color3.fromRGB(68, 76, 102),
 	element = Color3.fromRGB(28, 31, 43),
 	elementHover = Color3.fromRGB(36, 41, 56),
 	dropdownBg = Color3.fromRGB(18, 20, 28),
-	dropdownItemHover = Color3.fromRGB(29, 33, 46),
-	dropdownItemSelected = Color3.fromRGB(36, 41, 58),
+	dropdownItemHover = Color3.fromRGB(28, 32, 45),
+	dropdownItemSelected = Color3.fromRGB(34, 39, 54),
 	accent = Color3.fromRGB(124, 92, 252),
 	accentLight = Color3.fromRGB(111, 124, 247),
 	accentHover = Color3.fromRGB(145, 115, 255),
@@ -57,46 +57,53 @@ if not successFont then
 	fonts.regular = Enum.Font.Gotham
 end
 
-local directIcons = {
-	["star"] = "rbxassetid://10734953649",
-	["star-filled"] = "rbxassetid://10734953841",
-	["volume-2"] = "rbxassetid://10747375434",
-	["speaker"] = "rbxassetid://10747375434",
-	["chevron-down"] = "rbxassetid://10709790948",
-	["chevron-up"] = "rbxassetid://10709791523",
-	["chevron-left"] = "rbxassetid://10709790884",
-	["chevron-right"] = "rbxassetid://10709791008",
-	["list-filter"] = "rbxassetid://10709791143",
-	["filter"] = "rbxassetid://10709791143",
-	["key"] = "rbxassetid://10723414352",
-	["check"] = "rbxassetid://10709790644",
-	["diamond"] = "rbxassetid://10734953491",
-	["rhombus"] = "rbxassetid://10734953491",
-	["sliders-horizontal"] = "rbxassetid://10734952479",
-	["sliders"] = "rbxassetid://10734952479",
-	["swords"] = "rbxassetid://10709791437",
-	["sword"] = "rbxassetid://10709791437",
-	["shield"] = "rbxassetid://10723415903",
-	["user"] = "rbxassetid://10747373176",
-	["feather"] = "rbxassetid://10723387643",
-	["eye"] = "rbxassetid://10723387563",
-	["folder"] = "rbxassetid://10723387841",
-	["search"] = "rbxassetid://10734923549",
-	["languages"] = "rbxassetid://10723387971",
-	["bell"] = "rbxassetid://10709790426",
-	["split"] = "rbxassetid://10709791281",
-	["columns"] = "rbxassetid://10709791281",
-	["layout-grid"] = "rbxassetid://10709790575",
-	["box"] = "rbxassetid://10709790575",
-	["zap"] = "rbxassetid://10734954201",
-	["bot"] = "rbxassetid://10709790487",
-	["repeat"] = "rbxassetid://10734950382",
-	["flame"] = "rbxassetid://10723387721",
-	["heart"] = "rbxassetid://10723395402",
-	["sparkles"] = "rbxassetid://10734953491",
-	["trash"] = "rbxassetid://10747373105",
-	["lock"] = "rbxassetid://10723414827",
-	["crosshair"] = "rbxassetid://10709791053"
+local lucideSprites = {
+	["swords"] = {16898787671, {256, 256}, {514, 514}},
+	["sword"] = {16898787671, {256, 256}, {257, 514}},
+	["feather"] = {16898669897, {256, 256}, {0, 514}},
+	["user"] = {16898790259, {256, 256}, {0, 0}},
+	["users"] = {16898790259, {256, 256}, {514, 0}},
+	["eye"] = {16898669897, {256, 256}, {0, 0}},
+	["globe"] = {16898672599, {256, 256}, {257, 257}},
+	["folder"] = {16898671684, {256, 256}, {257, 0}},
+	["settings"] = {16898734421, {256, 256}, {514, 0}},
+	["sliders"] = {16898735040, {256, 256}, {257, 257}},
+	["sliders-horizontal"] = {16898735040, {256, 256}, {0, 257}},
+	["volume"] = {16898790615, {256, 256}, {514, 0}},
+	["volume-1"] = {16898790615, {256, 256}, {0, 0}},
+	["volume-2"] = {16898790615, {256, 256}, {257, 0}},
+	["speaker"] = {16898735455, {256, 256}, {0, 0}},
+	["star"] = {16898736776, {256, 256}, {257, 0}},
+	["key"] = {16898673616, {256, 256}, {514, 514}},
+	["list-filter"] = {16898674482, {256, 256}, {514, 514}},
+	["filter"] = {16898670775, {256, 256}, {0, 0}},
+	["check"] = {16898617411, {256, 256}, {257, 0}},
+	["chevron-down"] = {16898617411, {256, 256}, {514, 257}},
+	["chevron-up"] = {16898617509, {256, 256}, {514, 514}},
+	["chevron-left"] = {16898617509, {256, 256}, {0, 257}},
+	["chevron-right"] = {16898617509, {256, 256}, {0, 514}},
+	["columns"] = {16898619182, {256, 256}, {257, 257}},
+	["split"] = {16898735455, {256, 256}, {257, 514}},
+	["search"] = {16898734242, {256, 256}, {257, 0}},
+	["languages"] = {16898673999, {256, 256}, {257, 0}},
+	["bell"] = {16898615428, {256, 256}, {0, 514}},
+	["layout-grid"] = {16898674182, {256, 256}, {514, 0}},
+	["box"] = {16898616650, {256, 256}, {0, 514}},
+	["diamond"] = {16898669042, {256, 256}, {257, 0}},
+	["rhombus"] = {16898669042, {256, 256}, {257, 0}},
+	["gem"] = {16898672166, {256, 256}, {257, 514}},
+	["sparkles"] = {16898735175, {256, 256}, {514, 514}},
+	["shield"] = {16898734664, {256, 256}, {257, 0}},
+	["zap"] = {16898791349, {256, 256}, {257, 257}},
+	["crosshair"] = {16898668482, {256, 256}, {514, 257}},
+	["target"] = {16898788248, {256, 256}, {257, 0}},
+	["bot"] = {16898616650, {256, 256}, {514, 0}},
+	["flame"] = {16898670919, {256, 256}, {0, 257}},
+	["heart"] = {16898673271, {256, 256}, {0, 0}},
+	["lock"] = {16898674825, {256, 256}, {0, 257}},
+	["trash"] = {16898789012, {256, 256}, {514, 0}},
+	["activity"] = {16898612629, {256, 256}, {0, 514}},
+	["repeat"] = {16898734242, {256, 256}, {514, 514}}
 }
 
 function clickGui.applyIcon(imageObj, iconName)
@@ -104,17 +111,18 @@ function clickGui.applyIcon(imageObj, iconName)
 		iconName = "box"
 	end
 
-	imageObj.ImageRectOffset = Vector2.new(0, 0)
-	imageObj.ImageRectSize = Vector2.new(0, 0)
-
 	if type(iconName) == "number" or string.match(tostring(iconName), "^%d+$") then
 		imageObj.Image = "rbxassetid://" .. tostring(iconName)
+		imageObj.ImageRectOffset = Vector2.new(0, 0)
+		imageObj.ImageRectSize = Vector2.new(0, 0)
 		return
 	end
 
 	local str = tostring(iconName)
 	if string.sub(str, 1, 13) == "rbxassetid://" or string.sub(str, 1, 4) == "http" then
 		imageObj.Image = str
+		imageObj.ImageRectOffset = Vector2.new(0, 0)
+		imageObj.ImageRectSize = Vector2.new(0, 0)
 		return
 	end
 
@@ -123,10 +131,15 @@ function clickGui.applyIcon(imageObj, iconName)
 		clean = string.sub(clean, 8)
 	end
 
-	if directIcons[clean] then
-		imageObj.Image = directIcons[clean]
+	local spriteData = lucideSprites[clean]
+	if spriteData then
+		imageObj.Image = "rbxassetid://" .. tostring(spriteData[1])
+		imageObj.ImageRectSize = Vector2.new(spriteData[2][1], spriteData[2][2])
+		imageObj.ImageRectOffset = Vector2.new(spriteData[3][1], spriteData[3][2])
 	else
-		imageObj.Image = "rbxassetid://10709790575"
+		imageObj.Image = "rbxassetid://16898616650"
+		imageObj.ImageRectSize = Vector2.new(256, 256)
+		imageObj.ImageRectOffset = Vector2.new(0, 514)
 	end
 end
 
@@ -271,8 +284,8 @@ function clickGui:CreateWindow(config)
 
 	local tabList = Instance.new("Frame")
 	tabList.Name = "TabList"
-	tabList.Size = UDim2.new(0, 340, 0, 30)
-	tabList.Position = UDim2.new(0.5, -170, 0.5, -15)
+	tabList.Size = UDim2.new(0, 350, 0, 30)
+	tabList.Position = UDim2.new(0.5, -175, 0.5, -15)
 	tabList.BackgroundColor3 = theme.tabBar
 	tabList.BorderSizePixel = 0
 	tabList.Parent = topBar
@@ -595,7 +608,7 @@ function clickGui:CreateWindow(config)
 				else
 					clickGui.favorites[modName] = nil
 				end
-				tween(starBtn, TweenInfo.new(0.2, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+				tween(starBtn, TweenInfo.new(0.25, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
 					ImageColor3 = modFavorite and theme.starActive or theme.starInactive
 				})
 			end)
@@ -630,7 +643,7 @@ function clickGui:CreateWindow(config)
 			bindLabel.BackgroundTransparency = 1
 			bindLabel.Font = fonts.medium
 			bindLabel.Text = (modBind == Enum.KeyCode.None) and "None" or modBind.Name
-			bindLabel.TextColor3 = Color3.fromRGB(240, 240, 245)
+			bindLabel.TextColor3 = Color3.fromRGB(245, 245, 250)
 			bindLabel.TextSize = 9.5
 			bindLabel.TextXAlignment = Enum.TextXAlignment.Center
 			bindLabel.TextTruncate = Enum.TextTruncate.AtEnd
@@ -653,7 +666,7 @@ function clickGui:CreateWindow(config)
 							modBind = input.KeyCode
 							bindLabel.Text = input.KeyCode.Name
 						end
-						bindLabel.TextColor3 = Color3.fromRGB(240, 240, 245)
+						bindLabel.TextColor3 = Color3.fromRGB(245, 245, 250)
 						isBinding = false
 						conn:Disconnect()
 					end
@@ -725,7 +738,6 @@ function clickGui:CreateWindow(config)
 				local dIcon = opt.icon or "list-filter"
 				local dList = opt.options or {}
 				local dSelected = opt.default or dList[1] or ""
-				local dIsOpen = opt.open or false
 				local dCallback = opt.callback or function() end
 
 				itemOrder = itemOrder + 1
@@ -817,7 +829,7 @@ function clickGui:CreateWindow(config)
 				ddArrow.Size = UDim2.new(0, 11, 0, 11)
 				ddArrow.Position = UDim2.new(1, -18, 0.5, -5.5)
 				ddArrow.BackgroundTransparency = 1
-				clickGui.applyIcon(ddArrow, dIsOpen and "chevron-up" or "chevron-down")
+				clickGui.applyIcon(ddArrow, "chevron-down")
 				ddArrow.ImageColor3 = theme.textDesc
 				ddArrow.Parent = ddBox
 
@@ -828,9 +840,8 @@ function clickGui:CreateWindow(config)
 				ddListFrame.BackgroundColor3 = theme.dropdownBg
 				ddListFrame.BorderSizePixel = 0
 				ddListFrame.ClipsDescendants = true
-				ddListFrame.Visible = dIsOpen
+				ddListFrame.Visible = false
 				ddListFrame.LayoutOrder = subOrder
-				ddListFrame.AutomaticSize = Enum.AutomaticSize.Y
 				ddListFrame.Parent = ddContainer
 
 				local listCorner = Instance.new("UICorner")
@@ -844,17 +855,17 @@ function clickGui:CreateWindow(config)
 
 				local listLayout = Instance.new("UIListLayout")
 				listLayout.FillDirection = Enum.FillDirection.Vertical
-				listLayout.Padding = UDim.new(0, 1)
+				listLayout.Padding = UDim.new(0, 2)
 				listLayout.Parent = ddListFrame
 
 				local listPadding = Instance.new("UIPadding")
-				listPadding.PaddingTop = UDim.new(0, 3)
-				listPadding.PaddingBottom = UDim.new(0, 3)
-				listPadding.PaddingLeft = UDim.new(0, 3)
-				listPadding.PaddingRight = UDim.new(0, 3)
+				listPadding.PaddingTop = UDim.new(0, 4)
+				listPadding.PaddingBottom = UDim.new(0, 4)
+				listPadding.PaddingLeft = UDim.new(0, 4)
+				listPadding.PaddingRight = UDim.new(0, 4)
 				listPadding.Parent = ddListFrame
 
-				local isOpen = dIsOpen
+				local isOpen = false
 
 				local function updateOptions()
 					for _, child in ipairs(ddListFrame:GetChildren()) do
@@ -867,7 +878,7 @@ function clickGui:CreateWindow(config)
 						local optBtn = Instance.new("TextButton")
 						optBtn.Size = UDim2.new(1, 0, 0, 22)
 						optBtn.BackgroundColor3 = (optionName == dSelected) and theme.dropdownItemSelected or theme.element
-						optBtn.BackgroundTransparency = (optionName == dSelected) and 0.4 or 1
+						optBtn.BackgroundTransparency = (optionName == dSelected) and 0.3 or 1
 						optBtn.Text = ""
 						optBtn.AutoButtonColor = false
 						optBtn.Parent = ddListFrame
@@ -898,14 +909,14 @@ function clickGui:CreateWindow(config)
 
 						optBtn.MouseEnter:Connect(function()
 							tween(optBtn, TweenInfo.new(0.15, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
-								BackgroundTransparency = 0.5,
+								BackgroundTransparency = 0.4,
 								BackgroundColor3 = theme.dropdownItemHover
 							})
 							tween(optText, TweenInfo.new(0.15, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {TextColor3 = theme.text})
 						end)
 						optBtn.MouseLeave:Connect(function()
 							tween(optBtn, TweenInfo.new(0.15, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
-								BackgroundTransparency = (optionName == dSelected) and 0.4 or 1,
+								BackgroundTransparency = (optionName == dSelected) and 0.3 or 1,
 								BackgroundColor3 = (optionName == dSelected) and theme.dropdownItemSelected or theme.element
 							})
 							if optionName ~= dSelected then
@@ -917,8 +928,16 @@ function clickGui:CreateWindow(config)
 							dSelected = optionName
 							ddValueLabel.Text = tostring(optionName)
 							isOpen = false
-							ddListFrame.Visible = false
-							clickGui.applyIcon(ddArrow, "chevron-down")
+							local targetHeight = 0
+							local tw = tween(ddListFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+								Size = UDim2.new(1, 0, 0, targetHeight)
+							})
+							tw.Completed:Connect(function()
+								if not isOpen then
+									ddListFrame.Visible = false
+								end
+							end)
+							tween(ddArrow, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Rotation = 0})
 							updateOptions()
 							dCallback(optionName)
 						end)
@@ -927,8 +946,24 @@ function clickGui:CreateWindow(config)
 
 				ddBox.MouseButton1Click:Connect(function()
 					isOpen = not isOpen
-					ddListFrame.Visible = isOpen
-					clickGui.applyIcon(ddArrow, isOpen and "chevron-up" or "chevron-down")
+					local targetHeight = isOpen and (#dList * 24 + 8) or 0
+					if isOpen then
+						ddListFrame.Visible = true
+						tween(ddListFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+							Size = UDim2.new(1, 0, 0, targetHeight)
+						})
+						tween(ddArrow, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Rotation = 180})
+					else
+						local tw = tween(ddListFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+							Size = UDim2.new(1, 0, 0, targetHeight)
+						})
+						tw.Completed:Connect(function()
+							if not isOpen then
+								ddListFrame.Visible = false
+							end
+						end)
+						tween(ddArrow, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Rotation = 0})
+					end
 				end)
 
 				ddBox.MouseEnter:Connect(function()
@@ -1347,7 +1382,7 @@ function clickGui:CreateWindow(config)
 				pillLabel.BackgroundTransparency = 1
 				pillLabel.Font = fonts.medium
 				pillLabel.Text = (kDef == Enum.KeyCode.None) and "None" or kDef.Name
-				pillLabel.TextColor3 = Color3.fromRGB(240, 240, 245)
+				pillLabel.TextColor3 = Color3.fromRGB(245, 245, 250)
 				pillLabel.TextSize = 9.5
 				pillLabel.TextXAlignment = Enum.TextXAlignment.Center
 				pillLabel.TextTruncate = Enum.TextTruncate.AtEnd
@@ -1370,7 +1405,7 @@ function clickGui:CreateWindow(config)
 								kDef = input.KeyCode
 								pillLabel.Text = input.KeyCode.Name
 							end
-							pillLabel.TextColor3 = Color3.fromRGB(240, 240, 245)
+							pillLabel.TextColor3 = Color3.fromRGB(245, 245, 250)
 							listening = false
 							conn:Disconnect()
 							kCallback(kDef)
@@ -1391,13 +1426,16 @@ function clickGui:CreateWindow(config)
 			clickGui.open = not clickGui.open
 			if clickGui.open then
 				mainFrame.Visible = true
-				mainFrame.Size = UDim2.new(0, 870, 0, 520)
-				tween(mainFrame, TweenInfo.new(0.25, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-					Size = UDim2.new(0, 900, 0, 540)
+				mainFrame.Size = UDim2.new(0, 860, 0, 515)
+				mainFrame.BackgroundTransparency = 0.5
+				tween(mainFrame, TweenInfo.new(0.28, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+					Size = UDim2.new(0, 900, 0, 540),
+					BackgroundTransparency = 0
 				})
 			else
-				local tw = tween(mainFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
-					Size = UDim2.new(0, 870, 0, 520)
+				local tw = tween(mainFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
+					Size = UDim2.new(0, 860, 0, 515),
+					BackgroundTransparency = 1
 				})
 				tw.Completed:Connect(function()
 					if not clickGui.open then
