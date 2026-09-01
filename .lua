@@ -254,6 +254,10 @@ function clickGui:CreateWindow(config)
 	mainFrame.ZIndex = 20
 	mainFrame.Parent = screenGui
 
+	local mainScale = Instance.new("UIScale")
+	mainScale.Scale = 1
+	mainScale.Parent = mainFrame
+
 	local mainCorner = Instance.new("UICorner")
 	mainCorner.CornerRadius = UDim.new(0, 10)
 	mainCorner.Parent = mainFrame
@@ -356,16 +360,16 @@ function clickGui:CreateWindow(config)
 
 		if targetState then
 			mainFrame.Visible = true
-			mainFrame.Position = UDim2.new(0.5, 0, 0.5, 20)
-			local tw = tween(mainFrame, TweenInfo.new(0.24, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
-				Position = UDim2.new(0.5, 0, 0.5, 0)
+			mainScale.Scale = 0.8
+			local tw = tween(mainScale, TweenInfo.new(0.28, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+				Scale = 1
 			})
 			tw.Completed:Connect(function()
 				isToggling = false
 			end)
 		else
-			local tw = tween(mainFrame, TweenInfo.new(0.18, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
-				Position = UDim2.new(0.5, 0, 0.5, 20)
+			local tw = tween(mainScale, TweenInfo.new(0.18, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
+				Scale = 0.8
 			})
 			tw.Completed:Connect(function()
 				if not clickGui.open then
@@ -407,7 +411,7 @@ function clickGui:CreateWindow(config)
 	hudTop.Size = UDim2.new(1, 0, 0, 32)
 	hudTop.BackgroundColor3 = theme.topbar
 	hudTop.BorderSizePixel = 0
-	hudTop.ZIndex = 6
+	hudTop.ZIndex = 10
 	hudTop.Parent = bindsHudFrame
 
 	local hudTopCorner = Instance.new("UICorner")
@@ -422,7 +426,7 @@ function clickGui:CreateWindow(config)
 	hudIcon.BackgroundTransparency = 1
 	clickGui.applyIcon(hudIcon, "keyboard")
 	hudIcon.ImageColor3 = theme.accent
-	hudIcon.ZIndex = 7
+	hudIcon.ZIndex = 11
 	hudIcon.Parent = hudTop
 
 	local hudTitle = Instance.new("TextLabel")
@@ -434,7 +438,7 @@ function clickGui:CreateWindow(config)
 	hudTitle.TextColor3 = theme.text
 	hudTitle.TextSize = 13
 	hudTitle.TextXAlignment = Enum.TextXAlignment.Left
-	hudTitle.ZIndex = 7
+	hudTitle.ZIndex = 11
 	hudTitle.Parent = hudTop
 
 	local hudList = Instance.new("Frame")
@@ -442,6 +446,7 @@ function clickGui:CreateWindow(config)
 	hudList.Size = UDim2.new(1, 0, 0, 0)
 	hudList.Position = UDim2.new(0, 0, 0, 32)
 	hudList.BackgroundTransparency = 1
+	hudList.ClipsDescendants = true
 	hudList.ZIndex = 6
 	hudList.Parent = bindsHudFrame
 
@@ -478,6 +483,14 @@ function clickGui:CreateWindow(config)
 			if not stillActive then
 				hudRows[modName] = nil
 				if row and row.Parent then
+					local nameLbl = row:FindFirstChild("Name")
+					local bindStateLbl = row:FindFirstChild("BindState")
+					if nameLbl then
+						tween(nameLbl, TweenInfo.new(0.14, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {TextTransparency = 1})
+					end
+					if bindStateLbl then
+						tween(bindStateLbl, TweenInfo.new(0.14, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {TextTransparency = 1})
+					end
 					local tw = tween(row, TweenInfo.new(0.18, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
 						Size = UDim2.new(1, 0, 0, 0)
 					})
@@ -912,6 +925,33 @@ function clickGui:CreateWindow(config)
 				setToggle(not moduleObject.state)
 			end)
 
+			local function unbindKeyFromOthers(targetMod, key)
+				if key == Enum.KeyCode.None then return end
+				for _, otherMod in ipairs(clickGui.modules) do
+					if otherMod ~= targetMod and otherMod.bind == key then
+						otherMod.bind = Enum.KeyCode.None
+						if otherMod.updateBindLabel then
+							otherMod.updateBindLabel("None")
+						end
+						clickGui:Notify({
+							title = "Keybind Replaced",
+							content = otherMod.name .. " unbound (" .. key.Name .. " reassigned).",
+							duration = 2.5,
+							icon = "keyboard",
+							accentColor = theme.accentLight
+						})
+					end
+				end
+			end
+
+			moduleObject.updateBindLabel = function(txt)
+				bindLabel.Text = txt
+			end
+
+			if modBind ~= Enum.KeyCode.None then
+				unbindKeyFromOthers(moduleObject, modBind)
+			end
+
 			local isBinding = false
 			bindBtn.MouseButton1Click:Connect(function()
 				if isBinding then return end
@@ -926,8 +966,16 @@ function clickGui:CreateWindow(config)
 							moduleObject.bind = Enum.KeyCode.None
 							bindLabel.Text = "None"
 						else
+							unbindKeyFromOthers(moduleObject, input.KeyCode)
 							moduleObject.bind = input.KeyCode
 							bindLabel.Text = input.KeyCode.Name
+							clickGui:Notify({
+								title = "Keybind Set",
+								content = moduleObject.name .. " bound to " .. input.KeyCode.Name .. ".",
+								duration = 2,
+								icon = "keyboard",
+								accentColor = theme.accentLight
+							})
 						end
 						bindLabel.TextColor3 = Color3.fromRGB(245, 245, 250)
 						isBinding = false
@@ -947,6 +995,19 @@ function clickGui:CreateWindow(config)
 				end
 			end)
 
+			function moduleObject:SetBind(key)
+				if key ~= Enum.KeyCode.None then
+					unbindKeyFromOthers(moduleObject, key)
+				end
+				moduleObject.bind = key
+				bindLabel.Text = (key == Enum.KeyCode.None) and "None" or key.Name
+				if clickGui.refreshBindsHud then
+					clickGui.refreshBindsHud()
+				end
+			end
+			function moduleObject:GetBind()
+				return moduleObject.bind
+			end
 			function moduleObject:Set(val, silent)
 				setToggle(val, silent)
 			end
@@ -1185,8 +1246,40 @@ function clickGui:CreateWindow(config)
 						optBtn.MouseButton1Click:Connect(function()
 							if isMulti then
 								dSelected[optionName] = not dSelected[optionName]
+								local isNowSelected = (dSelected[optionName] == true)
 								ddValueLabel.Text = getDisplayString()
-								updateOptions()
+
+								if isNowSelected then
+									tween(optBtn, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+										BackgroundColor3 = theme.dropdownItemSelected,
+										BackgroundTransparency = 0.15
+									})
+									tween(optText, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+										TextColor3 = theme.text
+									})
+									optCheck.Visible = true
+									optCheck.Size = UDim2.new(0, 4, 0, 4)
+									tween(optCheck, TweenInfo.new(0.22, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+										Size = UDim2.new(0, 12, 0, 12)
+									})
+								else
+									tween(optBtn, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+										BackgroundColor3 = theme.element,
+										BackgroundTransparency = 1
+									})
+									tween(optText, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+										TextColor3 = theme.textDesc
+									})
+									local checkTw = tween(optCheck, TweenInfo.new(0.15, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
+										Size = UDim2.new(0, 4, 0, 4)
+									})
+									checkTw.Completed:Connect(function()
+										if not dSelected[optionName] then
+											optCheck.Visible = false
+										end
+									end)
+								end
+
 								dCallback(dSelected)
 							else
 								dSelected = optionName
