@@ -470,18 +470,21 @@ function clickGui:CreateWindow(config)
 		for modName, row in pairs(hudRows) do
 			local stillActive = false
 			for _, m in ipairs(activeBoundModules) do
-				if m.name == modName then stillActive = true break end
+				if m.name == modName then
+					stillActive = true
+					break
+				end
 			end
-			if not stillActive and row.Parent then
-				tween(row, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
-					Size = UDim2.new(1, 0, 0, 0)
-				})
-				task.delay(0.2, function()
-					if row.Parent and not row.Visible then
+			if not stillActive then
+				hudRows[modName] = nil
+				if row and row.Parent then
+					local tw = tween(row, TweenInfo.new(0.18, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
+						Size = UDim2.new(1, 0, 0, 0)
+					})
+					tw.Completed:Connect(function()
 						row:Destroy()
-						hudRows[modName] = nil
-					end
-				end)
+					end)
+				end
 			end
 		end
 
@@ -526,10 +529,13 @@ function clickGui:CreateWindow(config)
 
 				hudRows[mod.name] = row
 
-				tween(row, TweenInfo.new(0.24, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+				tween(row, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
 					Size = UDim2.new(1, 0, 0, 20)
 				})
 			else
+				tween(row, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+					Size = UDim2.new(1, 0, 0, 20)
+				})
 				local bindStateLbl = row:FindFirstChild("BindState")
 				if bindStateLbl then
 					bindStateLbl.Text = mod.bind.Name
@@ -2083,22 +2089,22 @@ function clickGui:Notify(config)
 	itemHolder.Name = "Holder_" .. math.random(1000, 9999)
 	itemHolder.Size = UDim2.new(1, 0, 0, 0)
 	itemHolder.BackgroundTransparency = 1
-	itemHolder.ClipsDescendants = true
+	itemHolder.ClipsDescendants = false
 	itemHolder.ZIndex = 5
 	itemHolder.Parent = clickGui.notifyContainer
 
 	local notifyFrame = Instance.new("Frame")
 	notifyFrame.Name = "Card"
-	notifyFrame.Size = UDim2.new(1, 0, 0, 44)
-	notifyFrame.Position = UDim2.new(0, 0, 0, 20)
+	notifyFrame.Size = UDim2.new(1, 0, 0, 46)
+	notifyFrame.Position = UDim2.new(0, 0, 0, 15)
 	notifyFrame.BackgroundColor3 = theme.card
 	notifyFrame.BorderSizePixel = 0
-	notifyFrame.ClipsDescendants = true
+	notifyFrame.ClipsDescendants = false
 	notifyFrame.ZIndex = 6
 	notifyFrame.Parent = itemHolder
 
 	local nCorner = Instance.new("UICorner")
-	nCorner.CornerRadius = UDim.new(0, 6)
+	nCorner.CornerRadius = UDim.new(0, 8)
 	nCorner.Parent = notifyFrame
 
 	local nStroke = Instance.new("UIStroke")
@@ -2117,7 +2123,7 @@ function clickGui:Notify(config)
 
 	local nTitleLabel = Instance.new("TextLabel")
 	nTitleLabel.Size = UDim2.new(1, -38, 0, 15)
-	nTitleLabel.Position = UDim2.new(0, 36, 0, 5)
+	nTitleLabel.Position = UDim2.new(0, 36, 0, 6)
 	nTitleLabel.BackgroundTransparency = 1
 	nTitleLabel.Font = fonts.bold
 	nTitleLabel.Text = nTitle
@@ -2129,7 +2135,7 @@ function clickGui:Notify(config)
 
 	local nDescLabel = Instance.new("TextLabel")
 	nDescLabel.Size = UDim2.new(1, -38, 0, 14)
-	nDescLabel.Position = UDim2.new(0, 36, 0, 20)
+	nDescLabel.Position = UDim2.new(0, 36, 0, 22)
 	nDescLabel.BackgroundTransparency = 1
 	nDescLabel.Font = fonts.regular
 	nDescLabel.Text = nContent
@@ -2140,8 +2146,8 @@ function clickGui:Notify(config)
 	nDescLabel.Parent = notifyFrame
 
 	local progressTrack = Instance.new("Frame")
-	progressTrack.Size = UDim2.new(1, -20, 0, 2)
-	progressTrack.Position = UDim2.new(0, 10, 1, -5)
+	progressTrack.Size = UDim2.new(1, -24, 0, 2)
+	progressTrack.Position = UDim2.new(0, 12, 1, -6)
 	progressTrack.BackgroundColor3 = Color3.fromRGB(30, 33, 44)
 	progressTrack.BorderSizePixel = 0
 	progressTrack.ZIndex = 8
@@ -2163,7 +2169,7 @@ function clickGui:Notify(config)
 	progressFillCorner.Parent = progressFill
 
 	tween(itemHolder, TweenInfo.new(0.28, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-		Size = UDim2.new(1, 0, 0, 44)
+		Size = UDim2.new(1, 0, 0, 46)
 	})
 	tween(notifyFrame, TweenInfo.new(0.28, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
 		Position = UDim2.new(0, 0, 0, 0)
@@ -2175,7 +2181,7 @@ function clickGui:Notify(config)
 
 	task.delay(nDuration, function()
 		tween(notifyFrame, TweenInfo.new(0.22, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
-			Position = UDim2.new(0, 0, 0, -20)
+			Position = UDim2.new(0, 0, 0, -15)
 		})
 		local hideTween = tween(itemHolder, TweenInfo.new(0.22, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
 			Size = UDim2.new(1, 0, 0, 0)
