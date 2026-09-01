@@ -29,7 +29,7 @@ local theme = {
 	dropdownItemHover = Color3.fromRGB(28, 32, 45),
 	dropdownItemSelected = Color3.fromRGB(34, 39, 54),
 	accent = Color3.fromRGB(124, 92, 252),
-	accentLight = Color3.fromRGB(111, 124, 247),
+	accentLight = Color3.fromRGB(155, 135, 252),
 	accentHover = Color3.fromRGB(145, 115, 255),
 	text = Color3.fromRGB(245, 246, 252),
 	textMuted = Color3.fromRGB(170, 175, 192),
@@ -68,6 +68,7 @@ local lucideSprites = {
 	["speaker"] = {16898735455, {256, 256}, {0, 0}},
 	["star"] = {16898736776, {256, 256}, {257, 0}},
 	["key"] = {16898673616, {256, 256}, {514, 514}},
+	["keyboard"] = {16898673794, {256, 256}, {257, 0}},
 	["list-filter"] = {16898674482, {256, 256}, {514, 514}},
 	["filter"] = {16898670775, {256, 256}, {0, 0}},
 	["check"] = {16898617411, {256, 256}, {257, 0}},
@@ -226,6 +227,22 @@ function clickGui:CreateWindow(config)
 
 	_G.ClickGuiWindowInstance = screenGui
 
+	local notifyContainer = Instance.new("Frame")
+	notifyContainer.Name = "NotifyContainer"
+	notifyContainer.Size = UDim2.new(0, 320, 0, 260)
+	notifyContainer.AnchorPoint = Vector2.new(0.5, 0)
+	notifyContainer.Position = UDim2.new(0.5, 0, 0.65, 0)
+	notifyContainer.BackgroundTransparency = 1
+	notifyContainer.ZIndex = 5
+	notifyContainer.Parent = screenGui
+
+	local notifyLayout = Instance.new("UIListLayout")
+	notifyLayout.FillDirection = Enum.FillDirection.Vertical
+	notifyLayout.VerticalAlignment = Enum.VerticalAlignment.Top
+	notifyLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+	notifyLayout.Padding = UDim.new(0, 6)
+	notifyLayout.Parent = notifyContainer
+
 	local mainFrame = Instance.new("Frame")
 	mainFrame.Name = "MainFrame"
 	mainFrame.Size = UDim2.new(0, 900, 0, 540)
@@ -234,6 +251,7 @@ function clickGui:CreateWindow(config)
 	mainFrame.BackgroundColor3 = theme.bg
 	mainFrame.BorderSizePixel = 0
 	mainFrame.ClipsDescendants = false
+	mainFrame.ZIndex = 10
 	mainFrame.Parent = screenGui
 
 	local mainCorner = Instance.new("UICorner")
@@ -250,6 +268,7 @@ function clickGui:CreateWindow(config)
 	topBar.Size = UDim2.new(1, 0, 0, 48)
 	topBar.BackgroundColor3 = theme.topbar
 	topBar.BorderSizePixel = 0
+	topBar.ZIndex = 11
 	topBar.Parent = mainFrame
 
 	local topBarCorner = Instance.new("UICorner")
@@ -261,6 +280,7 @@ function clickGui:CreateWindow(config)
 	topBarBottomCover.Position = UDim2.new(0, 0, 1, -10)
 	topBarBottomCover.BackgroundColor3 = theme.topbar
 	topBarBottomCover.BorderSizePixel = 0
+	topBarBottomCover.ZIndex = 11
 	topBarBottomCover.Parent = topBar
 
 	local topBarBorder = Instance.new("Frame")
@@ -268,6 +288,7 @@ function clickGui:CreateWindow(config)
 	topBarBorder.Position = UDim2.new(0, 0, 1, 0)
 	topBarBorder.BackgroundColor3 = theme.cardBorder
 	topBarBorder.BorderSizePixel = 0
+	topBarBorder.ZIndex = 12
 	topBarBorder.Parent = topBar
 
 	makeDraggable(topBar, mainFrame)
@@ -276,6 +297,7 @@ function clickGui:CreateWindow(config)
 	logoContainer.Name = "LogoContainer"
 	logoContainer.Size = UDim2.new(0, 48, 1, 0)
 	logoContainer.BackgroundTransparency = 1
+	logoContainer.ZIndex = 12
 	logoContainer.Parent = topBar
 
 	local logoImage = Instance.new("ImageLabel")
@@ -284,6 +306,7 @@ function clickGui:CreateWindow(config)
 	logoImage.BackgroundTransparency = 1
 	clickGui.applyIcon(logoImage, logoIcon)
 	logoImage.ImageColor3 = theme.accent
+	logoImage.ZIndex = 12
 	logoImage.Parent = logoContainer
 
 	local tabList = Instance.new("Frame")
@@ -292,6 +315,7 @@ function clickGui:CreateWindow(config)
 	tabList.Position = UDim2.new(0.5, -175, 0.5, -15)
 	tabList.BackgroundColor3 = theme.tabBar
 	tabList.BorderSizePixel = 0
+	tabList.ZIndex = 12
 	tabList.Parent = topBar
 
 	local tabListCorner = Instance.new("UICorner")
@@ -315,23 +339,8 @@ function clickGui:CreateWindow(config)
 	contentContainer.Size = UDim2.new(1, -20, 1, -60)
 	contentContainer.Position = UDim2.new(0, 10, 0, 52)
 	contentContainer.BackgroundTransparency = 1
+	contentContainer.ZIndex = 10
 	contentContainer.Parent = mainFrame
-
-	local notifyContainer = Instance.new("Frame")
-	notifyContainer.Name = "NotifyContainer"
-	notifyContainer.Size = UDim2.new(0, 320, 0, 250)
-	notifyContainer.AnchorPoint = Vector2.new(0.5, 0)
-	notifyContainer.Position = UDim2.new(0.5, 0, 0.62, 0)
-	notifyContainer.BackgroundTransparency = 1
-	notifyContainer.ZIndex = 200
-	notifyContainer.Parent = screenGui
-
-	local notifyLayout = Instance.new("UIListLayout")
-	notifyLayout.FillDirection = Enum.FillDirection.Vertical
-	notifyLayout.VerticalAlignment = Enum.VerticalAlignment.Top
-	notifyLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-	notifyLayout.Padding = UDim.new(0, 6)
-	notifyLayout.Parent = notifyContainer
 
 	clickGui.gui = screenGui
 	clickGui.mainFrame = mainFrame
@@ -375,11 +384,13 @@ function clickGui:CreateWindow(config)
 
 	local bindsHudFrame = Instance.new("Frame")
 	bindsHudFrame.Name = "KeybindsHUD"
-	bindsHudFrame.Size = UDim2.new(0, 180, 0, 32)
+	bindsHudFrame.Size = UDim2.new(0, 190, 0, 32)
 	bindsHudFrame.Position = UDim2.new(0, 20, 0, 120)
 	bindsHudFrame.BackgroundColor3 = theme.card
 	bindsHudFrame.BorderSizePixel = 0
-	bindsHudFrame.AutomaticSize = Enum.AutomaticSize.Y
+	bindsHudFrame.ClipsDescendants = true
+	bindsHudFrame.Visible = false
+	bindsHudFrame.ZIndex = 5
 	bindsHudFrame.Parent = screenGui
 
 	local hudCorner = Instance.new("UICorner")
@@ -393,48 +404,37 @@ function clickGui:CreateWindow(config)
 
 	local hudTop = Instance.new("Frame")
 	hudTop.Name = "HudTop"
-	hudTop.Size = UDim2.new(1, 0, 0, 30)
+	hudTop.Size = UDim2.new(1, 0, 0, 32)
 	hudTop.BackgroundColor3 = theme.topbar
 	hudTop.BorderSizePixel = 0
+	hudTop.ZIndex = 6
 	hudTop.Parent = bindsHudFrame
 
 	local hudTopCorner = Instance.new("UICorner")
 	hudTopCorner.CornerRadius = UDim.new(0, 8)
 	hudTopCorner.Parent = hudTop
 
-	local hudTopCover = Instance.new("Frame")
-	hudTopCover.Size = UDim2.new(1, 0, 0, 8)
-	hudTopCover.Position = UDim2.new(0, 0, 1, -8)
-	hudTopCover.BackgroundColor3 = theme.topbar
-	hudTopCover.BorderSizePixel = 0
-	hudTopCover.Parent = hudTop
-
-	local hudTopDivider = Instance.new("Frame")
-	hudTopDivider.Size = UDim2.new(1, 0, 0, 1)
-	hudTopDivider.Position = UDim2.new(0, 0, 1, 0)
-	hudTopDivider.BackgroundColor3 = theme.cardBorder
-	hudTopDivider.BorderSizePixel = 0
-	hudTopDivider.Parent = hudTop
-
 	makeDraggable(hudTop, bindsHudFrame)
 
 	local hudIcon = Instance.new("ImageLabel")
-	hudIcon.Size = UDim2.new(0, 14, 0, 14)
-	hudIcon.Position = UDim2.new(0, 10, 0.5, -7)
+	hudIcon.Size = UDim2.new(0, 16, 0, 16)
+	hudIcon.Position = UDim2.new(0, 10, 0.5, -8)
 	hudIcon.BackgroundTransparency = 1
-	clickGui.applyIcon(hudIcon, "key")
+	clickGui.applyIcon(hudIcon, "keyboard")
 	hudIcon.ImageColor3 = theme.accent
+	hudIcon.ZIndex = 7
 	hudIcon.Parent = hudTop
 
 	local hudTitle = Instance.new("TextLabel")
-	hudTitle.Size = UDim2.new(1, -34, 1, 0)
-	hudTitle.Position = UDim2.new(0, 30, 0, 0)
+	hudTitle.Size = UDim2.new(1, -36, 1, 0)
+	hudTitle.Position = UDim2.new(0, 32, 0, 0)
 	hudTitle.BackgroundTransparency = 1
 	hudTitle.Font = fonts.bold
 	hudTitle.Text = "Keybinds"
 	hudTitle.TextColor3 = theme.text
-	hudTitle.TextSize = 12
+	hudTitle.TextSize = 13
 	hudTitle.TextXAlignment = Enum.TextXAlignment.Left
+	hudTitle.ZIndex = 7
 	hudTitle.Parent = hudTop
 
 	local hudList = Instance.new("Frame")
@@ -442,12 +442,12 @@ function clickGui:CreateWindow(config)
 	hudList.Size = UDim2.new(1, 0, 0, 0)
 	hudList.Position = UDim2.new(0, 0, 0, 32)
 	hudList.BackgroundTransparency = 1
-	hudList.AutomaticSize = Enum.AutomaticSize.Y
+	hudList.ZIndex = 6
 	hudList.Parent = bindsHudFrame
 
 	local hudListLayout = Instance.new("UIListLayout")
 	hudListLayout.FillDirection = Enum.FillDirection.Vertical
-	hudListLayout.Padding = UDim.new(0, 2)
+	hudListLayout.Padding = UDim.new(0, 3)
 	hudListLayout.Parent = hudList
 
 	local hudListPadding = Instance.new("UIPadding")
@@ -460,63 +460,103 @@ function clickGui:CreateWindow(config)
 	local hudRows = {}
 
 	local function refreshHud()
-		local activeCount = 0
+		local activeBoundModules = {}
 		for _, mod in ipairs(clickGui.modules) do
-			if mod.bind and mod.bind ~= Enum.KeyCode.None then
-				activeCount = activeCount + 1
-				local row = hudRows[mod.name]
-				if not row then
-					row = Instance.new("Frame")
-					row.Name = "Row_" .. mod.name
-					row.Size = UDim2.new(1, 0, 0, 20)
-					row.BackgroundTransparency = 1
-					row.Parent = hudList
+			if mod.bind and mod.bind ~= Enum.KeyCode.None and mod.state == true then
+				table.insert(activeBoundModules, mod)
+			end
+		end
 
-					local nameLbl = Instance.new("TextLabel")
-					nameLbl.Name = "Name"
-					nameLbl.Size = UDim2.new(1, -60, 1, 0)
-					nameLbl.BackgroundTransparency = 1
-					nameLbl.Font = fonts.medium
-					nameLbl.Text = mod.name
-					nameLbl.TextColor3 = mod.state and theme.text or theme.textDesc
-					nameLbl.TextSize = 11
-					nameLbl.TextXAlignment = Enum.TextXAlignment.Left
-					nameLbl.TextTruncate = Enum.TextTruncate.AtEnd
-					nameLbl.Parent = row
-
-					local bindStateLbl = Instance.new("TextLabel")
-					bindStateLbl.Name = "BindState"
-					bindStateLbl.Size = UDim2.new(0, 60, 1, 0)
-					bindStateLbl.Position = UDim2.new(1, -60, 0, 0)
-					bindStateLbl.BackgroundTransparency = 1
-					bindStateLbl.Font = fonts.bold
-					bindStateLbl.Text = "[" .. mod.bind.Name .. "]"
-					bindStateLbl.TextColor3 = mod.state and theme.accentLight or theme.textDark
-					bindStateLbl.TextSize = 10
-					bindStateLbl.TextXAlignment = Enum.TextXAlignment.Right
-					bindStateLbl.Parent = row
-
-					hudRows[mod.name] = row
-				else
-					row.Visible = true
-					local nameLbl = row:FindFirstChild("Name")
-					local bindStateLbl = row:FindFirstChild("BindState")
-					if nameLbl then
-						nameLbl.TextColor3 = mod.state and theme.text or theme.textDesc
+		for modName, row in pairs(hudRows) do
+			local stillActive = false
+			for _, m in ipairs(activeBoundModules) do
+				if m.name == modName then stillActive = true break end
+			end
+			if not stillActive and row.Parent then
+				tween(row, TweenInfo.new(0.18, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+					Size = UDim2.new(1, 0, 0, 0)
+				})
+				task.delay(0.18, function()
+					if row.Parent and not row.Visible then
+						row:Destroy()
+						hudRows[modName] = nil
 					end
-					if bindStateLbl then
-						bindStateLbl.Text = "[" .. mod.bind.Name .. "]"
-						bindStateLbl.TextColor3 = mod.state and theme.accentLight or theme.textDark
-					end
-				end
+				end)
+			end
+		end
+
+		local activeCount = #activeBoundModules
+
+		for _, mod in ipairs(activeBoundModules) do
+			local row = hudRows[mod.name]
+			if not row or not row.Parent then
+				row = Instance.new("Frame")
+				row.Name = "Row_" .. mod.name
+				row.Size = UDim2.new(1, 0, 0, 0)
+				row.BackgroundTransparency = 1
+				row.ClipsDescendants = true
+				row.ZIndex = 7
+				row.Parent = hudList
+
+				local nameLbl = Instance.new("TextLabel")
+				nameLbl.Name = "Name"
+				nameLbl.Size = UDim2.new(1, -55, 1, 0)
+				nameLbl.BackgroundTransparency = 1
+				nameLbl.Font = fonts.medium
+				nameLbl.Text = mod.name
+				nameLbl.TextColor3 = theme.text
+				nameLbl.TextSize = 12
+				nameLbl.TextXAlignment = Enum.TextXAlignment.Left
+				nameLbl.TextTruncate = Enum.TextTruncate.AtEnd
+				nameLbl.ZIndex = 8
+				nameLbl.Parent = row
+
+				local bindStateLbl = Instance.new("TextLabel")
+				bindStateLbl.Name = "BindState"
+				bindStateLbl.Size = UDim2.new(0, 55, 1, 0)
+				bindStateLbl.Position = UDim2.new(1, -55, 0, 0)
+				bindStateLbl.BackgroundTransparency = 1
+				bindStateLbl.Font = fonts.bold
+				bindStateLbl.Text = mod.bind.Name
+				bindStateLbl.TextColor3 = theme.accentLight
+				bindStateLbl.TextSize = 11
+				bindStateLbl.TextXAlignment = Enum.TextXAlignment.Right
+				bindStateLbl.ZIndex = 8
+				bindStateLbl.Parent = row
+
+				hudRows[mod.name] = row
+
+				tween(row, TweenInfo.new(0.22, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+					Size = UDim2.new(1, 0, 0, 20)
+				})
 			else
-				if hudRows[mod.name] then
-					hudRows[mod.name].Visible = false
+				local bindStateLbl = row:FindFirstChild("BindState")
+				if bindStateLbl then
+					bindStateLbl.Text = mod.bind.Name
 				end
 			end
 		end
 
-		bindsHudFrame.Visible = (activeCount > 0)
+		local targetTotalH = (activeCount > 0) and (32 + (activeCount * 23) + 10) or 32
+
+		if activeCount > 0 then
+			bindsHudFrame.Visible = true
+			tween(bindsHudFrame, TweenInfo.new(0.22, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+				Size = UDim2.new(0, 190, 0, targetTotalH)
+			})
+			tween(hudList, TweenInfo.new(0.22, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+				Size = UDim2.new(1, 0, 0, targetTotalH - 32)
+			})
+		else
+			local tw = tween(bindsHudFrame, TweenInfo.new(0.18, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
+				Size = UDim2.new(0, 190, 0, 32)
+			})
+			tw.Completed:Connect(function()
+				if #activeBoundModules == 0 then
+					bindsHudFrame.Visible = false
+				end
+			end)
+		end
 	end
 
 	clickGui.refreshBindsHud = refreshHud
@@ -537,6 +577,7 @@ function clickGui:CreateWindow(config)
 		tabButton.BackgroundTransparency = 1
 		tabButton.Text = ""
 		tabButton.AutoButtonColor = false
+		tabButton.ZIndex = 13
 		tabButton.Parent = tabList
 
 		local tabIconImage = Instance.new("ImageLabel")
@@ -545,6 +586,7 @@ function clickGui:CreateWindow(config)
 		tabIconImage.BackgroundTransparency = 1
 		clickGui.applyIcon(tabIconImage, tabIcon)
 		tabIconImage.ImageColor3 = (tabIndex == 1) and theme.accent or theme.textDark
+		tabIconImage.ZIndex = 14
 		tabIconImage.Parent = tabButton
 
 		local activeLine = Instance.new("Frame")
@@ -554,6 +596,7 @@ function clickGui:CreateWindow(config)
 		activeLine.BackgroundColor3 = theme.accent
 		activeLine.BorderSizePixel = 0
 		activeLine.Visible = (tabIndex == 1)
+		activeLine.ZIndex = 14
 		activeLine.Parent = tabButton
 
 		local lineCorner = Instance.new("UICorner")
@@ -570,12 +613,14 @@ function clickGui:CreateWindow(config)
 		tabPage.Visible = (tabIndex == 1)
 		tabPage.CanvasSize = UDim2.new(0, 0, 0, 0)
 		tabPage.AutomaticCanvasSize = Enum.AutomaticSize.Y
+		tabPage.ZIndex = 11
 		tabPage.Parent = contentContainer
 
 		local columnsContainer = Instance.new("Frame")
 		columnsContainer.Name = "Columns"
 		columnsContainer.Size = UDim2.new(1, 0, 1, 0)
 		columnsContainer.BackgroundTransparency = 1
+		columnsContainer.ZIndex = 11
 		columnsContainer.Parent = tabPage
 
 		local colPadding = Instance.new("UIPadding")
@@ -597,6 +642,7 @@ function clickGui:CreateWindow(config)
 			col.Position = UDim2.new(0, (colIdx - 1) * (columnWidth + gap), 0, 0)
 			col.BackgroundTransparency = 1
 			col.AutomaticSize = Enum.AutomaticSize.Y
+			col.ZIndex = 11
 			col.Parent = columnsContainer
 
 			local colLayout = Instance.new("UIListLayout")
@@ -665,6 +711,7 @@ function clickGui:CreateWindow(config)
 			cardFrame.BackgroundColor3 = theme.card
 			cardFrame.BorderSizePixel = 0
 			cardFrame.AutomaticSize = Enum.AutomaticSize.Y
+			cardFrame.ZIndex = 12
 			cardFrame.Parent = targetColumn
 
 			local cardCorner = Instance.new("UICorner")
@@ -697,12 +744,14 @@ function clickGui:CreateWindow(config)
 			headerFrame.Size = UDim2.new(1, 0, 0, 22)
 			headerFrame.BackgroundTransparency = 1
 			headerFrame.LayoutOrder = 0
+			headerFrame.ZIndex = 13
 			headerFrame.Parent = cardFrame
 
 			local leftHeader = Instance.new("Frame")
 			leftHeader.Name = "Left"
 			leftHeader.Size = UDim2.new(1, -110, 1, 0)
 			leftHeader.BackgroundTransparency = 1
+			leftHeader.ZIndex = 13
 			leftHeader.Parent = headerFrame
 
 			local leftLayout = Instance.new("UIListLayout")
@@ -716,6 +765,7 @@ function clickGui:CreateWindow(config)
 			modIconLabel.BackgroundTransparency = 1
 			clickGui.applyIcon(modIconLabel, modIcon)
 			modIconLabel.ImageColor3 = theme.textMuted
+			modIconLabel.ZIndex = 14
 			modIconLabel.Parent = leftHeader
 
 			local titleLabel = Instance.new("TextLabel")
@@ -727,6 +777,7 @@ function clickGui:CreateWindow(config)
 			titleLabel.TextSize = 14
 			titleLabel.TextXAlignment = Enum.TextXAlignment.Left
 			titleLabel.TextTruncate = Enum.TextTruncate.AtEnd
+			titleLabel.ZIndex = 14
 			titleLabel.Parent = leftHeader
 
 			local rightHeader = Instance.new("Frame")
@@ -734,6 +785,7 @@ function clickGui:CreateWindow(config)
 			rightHeader.Size = UDim2.new(0, 110, 1, 0)
 			rightHeader.Position = UDim2.new(1, -110, 0, 0)
 			rightHeader.BackgroundTransparency = 1
+			rightHeader.ZIndex = 13
 			rightHeader.Parent = headerFrame
 
 			local rightLayout = Instance.new("UIListLayout")
@@ -748,6 +800,7 @@ function clickGui:CreateWindow(config)
 			starBtn.BackgroundTransparency = 1
 			clickGui.applyIcon(starBtn, "star")
 			starBtn.ImageColor3 = modFavorite and theme.starActive or theme.starInactive
+			starBtn.ZIndex = 14
 			starBtn.Parent = rightHeader
 
 			starBtn.MouseButton1Click:Connect(function()
@@ -767,6 +820,7 @@ function clickGui:CreateWindow(config)
 			bindBtn.BackgroundColor3 = theme.element
 			bindBtn.Text = ""
 			bindBtn.AutoButtonColor = false
+			bindBtn.ZIndex = 14
 			bindBtn.Parent = rightHeader
 
 			local bindCorner = Instance.new("UICorner")
@@ -779,11 +833,12 @@ function clickGui:CreateWindow(config)
 			bindStroke.Parent = bindBtn
 
 			local bindIcon = Instance.new("ImageLabel")
-			bindIcon.Size = UDim2.new(0, 11, 0, 11)
-			bindIcon.Position = UDim2.new(0, 4, 0.5, -5)
+			bindIcon.Size = UDim2.new(0, 12, 0, 12)
+			bindIcon.Position = UDim2.new(0, 4, 0.5, -6)
 			bindIcon.BackgroundTransparency = 1
-			clickGui.applyIcon(bindIcon, "key")
+			clickGui.applyIcon(bindIcon, "keyboard")
 			bindIcon.ImageColor3 = theme.textMuted
+			bindIcon.ZIndex = 15
 			bindIcon.Parent = bindBtn
 
 			local bindLabel = Instance.new("TextLabel")
@@ -796,6 +851,7 @@ function clickGui:CreateWindow(config)
 			bindLabel.TextSize = 10
 			bindLabel.TextXAlignment = Enum.TextXAlignment.Center
 			bindLabel.TextTruncate = Enum.TextTruncate.AtEnd
+			bindLabel.ZIndex = 15
 			bindLabel.Parent = bindBtn
 
 			local toggleSwitch = Instance.new("TextButton")
@@ -803,6 +859,7 @@ function clickGui:CreateWindow(config)
 			toggleSwitch.BackgroundColor3 = modState and theme.accent or theme.switchOff
 			toggleSwitch.Text = ""
 			toggleSwitch.AutoButtonColor = false
+			toggleSwitch.ZIndex = 14
 			toggleSwitch.Parent = rightHeader
 
 			local switchCorner = Instance.new("UICorner")
@@ -814,6 +871,7 @@ function clickGui:CreateWindow(config)
 			switchKnob.Position = modState and UDim2.new(1, -14, 0.5, -6) or UDim2.new(0, 2, 0.5, -6)
 			switchKnob.BackgroundColor3 = theme.switchKnob
 			switchKnob.BorderSizePixel = 0
+			switchKnob.ZIndex = 15
 			switchKnob.Parent = toggleSwitch
 
 			local knobCorner = Instance.new("UICorner")
@@ -926,6 +984,7 @@ function clickGui:CreateWindow(config)
 				ddContainer.BackgroundTransparency = 1
 				ddContainer.LayoutOrder = itemOrder
 				ddContainer.AutomaticSize = Enum.AutomaticSize.Y
+				ddContainer.ZIndex = 13
 				ddContainer.Parent = cardFrame
 
 				local ddLayout = Instance.new("UIListLayout")
@@ -948,6 +1007,7 @@ function clickGui:CreateWindow(config)
 					ddLabel.TextSize = 13
 					ddLabel.TextXAlignment = Enum.TextXAlignment.Left
 					ddLabel.LayoutOrder = subOrder
+					ddLabel.ZIndex = 14
 					ddLabel.Parent = ddContainer
 				end
 
@@ -963,6 +1023,7 @@ function clickGui:CreateWindow(config)
 					ddDescLabel.TextXAlignment = Enum.TextXAlignment.Left
 					ddDescLabel.TextTruncate = Enum.TextTruncate.AtEnd
 					ddDescLabel.LayoutOrder = subOrder
+					ddDescLabel.ZIndex = 14
 					ddDescLabel.Parent = ddContainer
 				end
 
@@ -974,6 +1035,7 @@ function clickGui:CreateWindow(config)
 				ddWrapper.BorderSizePixel = 0
 				ddWrapper.ClipsDescendants = true
 				ddWrapper.LayoutOrder = subOrder
+				ddWrapper.ZIndex = 14
 				ddWrapper.Parent = ddContainer
 
 				local ddWrapperCorner = Instance.new("UICorner")
@@ -990,6 +1052,7 @@ function clickGui:CreateWindow(config)
 				ddBox.BackgroundTransparency = 1
 				ddBox.Text = ""
 				ddBox.AutoButtonColor = false
+				ddBox.ZIndex = 15
 				ddBox.Parent = ddWrapper
 
 				local ddFilterIcon = Instance.new("ImageLabel")
@@ -998,6 +1061,7 @@ function clickGui:CreateWindow(config)
 				ddFilterIcon.BackgroundTransparency = 1
 				clickGui.applyIcon(ddFilterIcon, dIcon)
 				ddFilterIcon.ImageColor3 = theme.textDesc
+				ddFilterIcon.ZIndex = 16
 				ddFilterIcon.Parent = ddBox
 
 				local ddValueLabel = Instance.new("TextLabel")
@@ -1009,6 +1073,7 @@ function clickGui:CreateWindow(config)
 				ddValueLabel.TextSize = 12
 				ddValueLabel.TextXAlignment = Enum.TextXAlignment.Left
 				ddValueLabel.TextTruncate = Enum.TextTruncate.AtEnd
+				ddValueLabel.ZIndex = 16
 				ddValueLabel.Parent = ddBox
 
 				local function getDisplayString()
@@ -1031,6 +1096,7 @@ function clickGui:CreateWindow(config)
 				ddArrow.BackgroundTransparency = 1
 				clickGui.applyIcon(ddArrow, "chevron-down")
 				ddArrow.ImageColor3 = theme.textDesc
+				ddArrow.ZIndex = 16
 				ddArrow.Parent = ddBox
 
 				local ddListFrame = Instance.new("Frame")
@@ -1040,6 +1106,7 @@ function clickGui:CreateWindow(config)
 				ddListFrame.BackgroundTransparency = 1
 				ddListFrame.BorderSizePixel = 0
 				ddListFrame.ClipsDescendants = true
+				ddListFrame.ZIndex = 15
 				ddListFrame.Parent = ddWrapper
 
 				local listLayout = Instance.new("UIListLayout")
@@ -1072,6 +1139,7 @@ function clickGui:CreateWindow(config)
 						optBtn.BackgroundTransparency = isSelected and 0.15 or 1
 						optBtn.Text = ""
 						optBtn.AutoButtonColor = false
+						optBtn.ZIndex = 16
 						optBtn.Parent = ddListFrame
 
 						local optCorner = Instance.new("UICorner")
@@ -1087,6 +1155,7 @@ function clickGui:CreateWindow(config)
 						optText.TextColor3 = isSelected and theme.text or theme.textDesc
 						optText.TextSize = 12
 						optText.TextXAlignment = Enum.TextXAlignment.Left
+						optText.ZIndex = 17
 						optText.Parent = optBtn
 
 						local optCheck = Instance.new("ImageLabel")
@@ -1096,22 +1165,26 @@ function clickGui:CreateWindow(config)
 						clickGui.applyIcon(optCheck, "check")
 						optCheck.ImageColor3 = theme.text
 						optCheck.Visible = isSelected
+						optCheck.ZIndex = 17
 						optCheck.Parent = optBtn
 
 						optBtn.MouseEnter:Connect(function()
-							tween(optBtn, TweenInfo.new(0.15, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
-								BackgroundTransparency = 0.3,
-								BackgroundColor3 = theme.dropdownItemHover
-							})
-							tween(optText, TweenInfo.new(0.15, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {TextColor3 = theme.text})
+							local curSel = isMulti and (dSelected[optionName] == true) or (optionName == dSelected)
+							if not curSel then
+								tween(optBtn, TweenInfo.new(0.15, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+									BackgroundTransparency = 0.3,
+									BackgroundColor3 = theme.dropdownItemHover
+								})
+								tween(optText, TweenInfo.new(0.15, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {TextColor3 = theme.text})
+							end
 						end)
 						optBtn.MouseLeave:Connect(function()
 							local curSel = isMulti and (dSelected[optionName] == true) or (optionName == dSelected)
-							tween(optBtn, TweenInfo.new(0.15, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
-								BackgroundTransparency = curSel and 0.15 or 1,
-								BackgroundColor3 = curSel and theme.dropdownItemSelected or theme.element
-							})
 							if not curSel then
+								tween(optBtn, TweenInfo.new(0.15, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+									BackgroundTransparency = 1,
+									BackgroundColor3 = theme.element
+								})
 								tween(optText, TweenInfo.new(0.15, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {TextColor3 = theme.textDesc})
 							end
 						end)
@@ -1207,11 +1280,13 @@ function clickGui:CreateWindow(config)
 				toggleRow.Size = UDim2.new(1, 0, 0, tDesc ~= "" and 34 or 24)
 				toggleRow.BackgroundTransparency = 1
 				toggleRow.LayoutOrder = itemOrder
+				toggleRow.ZIndex = 13
 				toggleRow.Parent = cardFrame
 
 				local textWrap = Instance.new("Frame")
 				textWrap.Size = UDim2.new(1, -36, 1, 0)
 				textWrap.BackgroundTransparency = 1
+				textWrap.ZIndex = 13
 				textWrap.Parent = toggleRow
 
 				local textWrapLayout = Instance.new("UIListLayout")
@@ -1228,6 +1303,7 @@ function clickGui:CreateWindow(config)
 				label.TextColor3 = theme.text
 				label.TextSize = 13
 				label.TextXAlignment = Enum.TextXAlignment.Left
+				label.ZIndex = 14
 				label.Parent = textWrap
 
 				local descLabel
@@ -1241,6 +1317,7 @@ function clickGui:CreateWindow(config)
 					descLabel.TextSize = 11
 					descLabel.TextXAlignment = Enum.TextXAlignment.Left
 					descLabel.TextTruncate = Enum.TextTruncate.AtEnd
+					descLabel.ZIndex = 14
 					descLabel.Parent = textWrap
 				end
 
@@ -1250,6 +1327,7 @@ function clickGui:CreateWindow(config)
 				miniSwitch.BackgroundColor3 = tState and theme.accent or theme.switchOff
 				miniSwitch.Text = ""
 				miniSwitch.AutoButtonColor = false
+				miniSwitch.ZIndex = 14
 				miniSwitch.Parent = toggleRow
 
 				local switchCorner = Instance.new("UICorner")
@@ -1261,6 +1339,7 @@ function clickGui:CreateWindow(config)
 				switchKnob.Position = tState and UDim2.new(1, -12, 0.5, -5) or UDim2.new(0, 2, 0.5, -5)
 				switchKnob.BackgroundColor3 = theme.switchKnob
 				switchKnob.BorderSizePixel = 0
+				switchKnob.ZIndex = 15
 				switchKnob.Parent = miniSwitch
 
 				local knobCorner = Instance.new("UICorner")
@@ -1318,11 +1397,13 @@ function clickGui:CreateWindow(config)
 				sliderContainer.Size = UDim2.new(1, 0, 0, sDesc ~= "" and 46 or 34)
 				sliderContainer.BackgroundTransparency = 1
 				sliderContainer.LayoutOrder = itemOrder
+				sliderContainer.ZIndex = 13
 				sliderContainer.Parent = cardFrame
 
 				local headerRow = Instance.new("Frame")
 				headerRow.Size = UDim2.new(1, 0, 0, 16)
 				headerRow.BackgroundTransparency = 1
+				headerRow.ZIndex = 13
 				headerRow.Parent = sliderContainer
 
 				local nameLabel = Instance.new("TextLabel")
@@ -1333,6 +1414,7 @@ function clickGui:CreateWindow(config)
 				nameLabel.TextColor3 = theme.text
 				nameLabel.TextSize = 13
 				nameLabel.TextXAlignment = Enum.TextXAlignment.Left
+				nameLabel.ZIndex = 14
 				nameLabel.Parent = headerRow
 
 				local valueLabel = Instance.new("TextLabel")
@@ -1343,6 +1425,7 @@ function clickGui:CreateWindow(config)
 				valueLabel.TextColor3 = theme.accentLight
 				valueLabel.TextSize = 13
 				valueLabel.TextXAlignment = Enum.TextXAlignment.Right
+				valueLabel.ZIndex = 14
 				valueLabel.Parent = headerRow
 
 				local formatValue = function(val)
@@ -1369,6 +1452,7 @@ function clickGui:CreateWindow(config)
 					descLabel.TextSize = 11
 					descLabel.TextXAlignment = Enum.TextXAlignment.Left
 					descLabel.TextTruncate = Enum.TextTruncate.AtEnd
+					descLabel.ZIndex = 14
 					descLabel.Parent = sliderContainer
 
 					trackOffset = 34
@@ -1380,6 +1464,7 @@ function clickGui:CreateWindow(config)
 				track.BackgroundColor3 = theme.sliderTrack
 				track.Text = ""
 				track.AutoButtonColor = false
+				track.ZIndex = 14
 				track.Parent = sliderContainer
 
 				local trackCorner = Instance.new("UICorner")
@@ -1392,6 +1477,7 @@ function clickGui:CreateWindow(config)
 				fill.Size = UDim2.new(initialPercent, 0, 1, 0)
 				fill.BackgroundColor3 = theme.accent
 				fill.BorderSizePixel = 0
+				fill.ZIndex = 15
 				fill.Parent = track
 
 				local fillCorner = Instance.new("UICorner")
@@ -1404,6 +1490,7 @@ function clickGui:CreateWindow(config)
 				knob.Position = UDim2.new(initialPercent, 0, 0.5, 0)
 				knob.BackgroundColor3 = theme.bg
 				knob.BorderSizePixel = 0
+				knob.ZIndex = 16
 				knob.Parent = track
 
 				local knobCorner = Instance.new("UICorner")
@@ -1516,11 +1603,13 @@ function clickGui:CreateWindow(config)
 				cpContainer.Size = UDim2.new(1, 0, 0, cpDesc ~= "" and 34 or 24)
 				cpContainer.BackgroundTransparency = 1
 				cpContainer.LayoutOrder = itemOrder
+				cpContainer.ZIndex = 13
 				cpContainer.Parent = cardFrame
 
 				local textWrap = Instance.new("Frame")
 				textWrap.Size = UDim2.new(1, -36, 1, 0)
 				textWrap.BackgroundTransparency = 1
+				textWrap.ZIndex = 13
 				textWrap.Parent = cpContainer
 
 				local textWrapLayout = Instance.new("UIListLayout")
@@ -1537,6 +1626,7 @@ function clickGui:CreateWindow(config)
 				label.TextColor3 = theme.text
 				label.TextSize = 13
 				label.TextXAlignment = Enum.TextXAlignment.Left
+				label.ZIndex = 14
 				label.Parent = textWrap
 
 				local descLabel
@@ -1549,6 +1639,7 @@ function clickGui:CreateWindow(config)
 					descLabel.TextColor3 = theme.textDesc
 					descLabel.TextSize = 11
 					descLabel.TextXAlignment = Enum.TextXAlignment.Left
+					descLabel.ZIndex = 14
 					descLabel.Parent = textWrap
 				end
 
@@ -1558,6 +1649,7 @@ function clickGui:CreateWindow(config)
 				previewBtn.BackgroundColor3 = cpDef
 				previewBtn.Text = ""
 				previewBtn.AutoButtonColor = false
+				previewBtn.ZIndex = 14
 				previewBtn.Parent = cpContainer
 
 				local pCorner = Instance.new("UICorner")
@@ -1610,6 +1702,7 @@ function clickGui:CreateWindow(config)
 				tbContainer.Size = UDim2.new(1, 0, 0, tbDesc ~= "" and 54 or 46)
 				tbContainer.BackgroundTransparency = 1
 				tbContainer.LayoutOrder = itemOrder
+				tbContainer.ZIndex = 13
 				tbContainer.Parent = cardFrame
 
 				local subOrder = 0
@@ -1625,6 +1718,7 @@ function clickGui:CreateWindow(config)
 					tbLabel.TextColor3 = theme.text
 					tbLabel.TextSize = 13
 					tbLabel.TextXAlignment = Enum.TextXAlignment.Left
+					tbLabel.ZIndex = 14
 					tbLabel.Parent = tbContainer
 				end
 
@@ -1639,6 +1733,7 @@ function clickGui:CreateWindow(config)
 					descLabel.TextColor3 = theme.textDesc
 					descLabel.TextSize = 11
 					descLabel.TextXAlignment = Enum.TextXAlignment.Left
+					descLabel.ZIndex = 14
 					descLabel.Parent = tbContainer
 					offset = offset + 16
 				end
@@ -1648,6 +1743,7 @@ function clickGui:CreateWindow(config)
 				boxFrame.Position = UDim2.new(0, 0, 0, offset)
 				boxFrame.BackgroundColor3 = theme.element
 				boxFrame.BorderSizePixel = 0
+				boxFrame.ZIndex = 14
 				boxFrame.Parent = tbContainer
 
 				local bCorner = Instance.new("UICorner")
@@ -1671,6 +1767,7 @@ function clickGui:CreateWindow(config)
 				boxInput.TextSize = 12
 				boxInput.TextXAlignment = Enum.TextXAlignment.Left
 				boxInput.ClearTextOnFocus = false
+				boxInput.ZIndex = 15
 				boxInput.Parent = boxFrame
 
 				boxInput.Focused:Connect(function()
@@ -1712,6 +1809,7 @@ function clickGui:CreateWindow(config)
 				pFrame.BorderSizePixel = 0
 				pFrame.AutomaticSize = Enum.AutomaticSize.Y
 				pFrame.LayoutOrder = itemOrder
+				pFrame.ZIndex = 13
 				pFrame.Parent = cardFrame
 
 				local pCorner = Instance.new("UICorner")
@@ -1743,6 +1841,7 @@ function clickGui:CreateWindow(config)
 				pTitleLbl.TextColor3 = theme.text
 				pTitleLbl.TextSize = 12
 				pTitleLbl.TextXAlignment = Enum.TextXAlignment.Left
+				pTitleLbl.ZIndex = 14
 				pTitleLbl.Parent = pFrame
 
 				local pContentLbl = Instance.new("TextLabel")
@@ -1755,6 +1854,7 @@ function clickGui:CreateWindow(config)
 				pContentLbl.TextWrapped = true
 				pContentLbl.AutomaticSize = Enum.AutomaticSize.Y
 				pContentLbl.TextXAlignment = Enum.TextXAlignment.Left
+				pContentLbl.ZIndex = 14
 				pContentLbl.Parent = pFrame
 
 				local paraObj = {}
@@ -1779,6 +1879,7 @@ function clickGui:CreateWindow(config)
 				btnWrap.Size = UDim2.new(1, 0, 0, bDesc ~= "" and 44 or 28)
 				btnWrap.BackgroundTransparency = 1
 				btnWrap.LayoutOrder = itemOrder
+				btnWrap.ZIndex = 13
 				btnWrap.Parent = cardFrame
 
 				local btn = Instance.new("TextButton")
@@ -1790,6 +1891,7 @@ function clickGui:CreateWindow(config)
 				btn.Font = fonts.medium
 				btn.TextSize = 12
 				btn.AutoButtonColor = false
+				btn.ZIndex = 14
 				btn.Parent = btnWrap
 
 				local btnCorner = Instance.new("UICorner")
@@ -1811,6 +1913,7 @@ function clickGui:CreateWindow(config)
 					descLabel.TextColor3 = theme.textDesc
 					descLabel.TextSize = 11
 					descLabel.TextXAlignment = Enum.TextXAlignment.Left
+					descLabel.ZIndex = 14
 					descLabel.Parent = btnWrap
 				end
 
@@ -1846,11 +1949,13 @@ function clickGui:CreateWindow(config)
 				keyRow.Size = UDim2.new(1, 0, 0, kDesc ~= "" and 34 or 24)
 				keyRow.BackgroundTransparency = 1
 				keyRow.LayoutOrder = itemOrder
+				keyRow.ZIndex = 13
 				keyRow.Parent = cardFrame
 
 				local textWrap = Instance.new("Frame")
 				textWrap.Size = UDim2.new(1, -60, 1, 0)
 				textWrap.BackgroundTransparency = 1
+				textWrap.ZIndex = 13
 				textWrap.Parent = keyRow
 
 				local textWrapLayout = Instance.new("UIListLayout")
@@ -1867,6 +1972,7 @@ function clickGui:CreateWindow(config)
 				label.TextColor3 = theme.text
 				label.TextSize = 13
 				label.TextXAlignment = Enum.TextXAlignment.Left
+				label.ZIndex = 14
 				label.Parent = textWrap
 
 				local descLabel
@@ -1879,6 +1985,7 @@ function clickGui:CreateWindow(config)
 					descLabel.TextColor3 = theme.textDesc
 					descLabel.TextSize = 11
 					descLabel.TextXAlignment = Enum.TextXAlignment.Left
+					descLabel.ZIndex = 14
 					descLabel.Parent = textWrap
 				end
 
@@ -1888,6 +1995,7 @@ function clickGui:CreateWindow(config)
 				pill.BackgroundColor3 = theme.element
 				pill.Text = ""
 				pill.AutoButtonColor = false
+				pill.ZIndex = 14
 				pill.Parent = keyRow
 
 				local pillCorner = Instance.new("UICorner")
@@ -1900,11 +2008,12 @@ function clickGui:CreateWindow(config)
 				pillStroke.Parent = pill
 
 				local pillIcon = Instance.new("ImageLabel")
-				pillIcon.Size = UDim2.new(0, 11, 0, 11)
-				pillIcon.Position = UDim2.new(0, 4, 0.5, -5)
+				pillIcon.Size = UDim2.new(0, 12, 0, 12)
+				pillIcon.Position = UDim2.new(0, 4, 0.5, -6)
 				pillIcon.BackgroundTransparency = 1
-				clickGui.applyIcon(pillIcon, "key")
+				clickGui.applyIcon(pillIcon, "keyboard")
 				pillIcon.ImageColor3 = theme.textMuted
+				pillIcon.ZIndex = 15
 				pillIcon.Parent = pill
 
 				local pillLabel = Instance.new("TextLabel")
@@ -1917,6 +2026,7 @@ function clickGui:CreateWindow(config)
 				pillLabel.TextSize = 10
 				pillLabel.TextXAlignment = Enum.TextXAlignment.Center
 				pillLabel.TextTruncate = Enum.TextTruncate.AtEnd
+				pillLabel.ZIndex = 15
 				pillLabel.Parent = pill
 
 				local listening = false
@@ -1983,11 +2093,12 @@ function clickGui:Notify(config)
 	if not clickGui.notifyContainer then return end
 
 	local notifyFrame = Instance.new("Frame")
-	notifyFrame.Size = UDim2.new(0, 260, 0, 42)
+	notifyFrame.Size = UDim2.new(0, 260, 0, 44)
 	notifyFrame.Position = UDim2.new(0, 0, 0, 15)
 	notifyFrame.BackgroundColor3 = theme.card
 	notifyFrame.BorderSizePixel = 0
 	notifyFrame.ClipsDescendants = true
+	notifyFrame.ZIndex = 6
 	notifyFrame.Parent = clickGui.notifyContainer
 
 	local nCorner = Instance.new("UICorner")
@@ -1999,40 +2110,37 @@ function clickGui:Notify(config)
 	nStroke.Thickness = 1
 	nStroke.Parent = notifyFrame
 
-	local accentBar = Instance.new("Frame")
-	accentBar.Size = UDim2.new(0, 3, 1, 0)
-	accentBar.BackgroundColor3 = accentColor
-	accentBar.BorderSizePixel = 0
-	accentBar.Parent = notifyFrame
-
 	local nIconImg = Instance.new("ImageLabel")
 	nIconImg.Size = UDim2.new(0, 16, 0, 16)
 	nIconImg.Position = UDim2.new(0, 12, 0.5, -8)
 	nIconImg.BackgroundTransparency = 1
 	clickGui.applyIcon(nIconImg, nIcon)
 	nIconImg.ImageColor3 = accentColor
+	nIconImg.ZIndex = 7
 	nIconImg.Parent = notifyFrame
 
 	local nTitleLabel = Instance.new("TextLabel")
 	nTitleLabel.Size = UDim2.new(1, -38, 0, 15)
-	nTitleLabel.Position = UDim2.new(0, 34, 0, 5)
+	nTitleLabel.Position = UDim2.new(0, 36, 0, 6)
 	nTitleLabel.BackgroundTransparency = 1
 	nTitleLabel.Font = fonts.bold
 	nTitleLabel.Text = nTitle
 	nTitleLabel.TextColor3 = theme.text
-	nTitleLabel.TextSize = 12
+	nTitleLabel.TextSize = 13
 	nTitleLabel.TextXAlignment = Enum.TextXAlignment.Left
+	nTitleLabel.ZIndex = 7
 	nTitleLabel.Parent = notifyFrame
 
 	local nDescLabel = Instance.new("TextLabel")
 	nDescLabel.Size = UDim2.new(1, -38, 0, 14)
-	nDescLabel.Position = UDim2.new(0, 34, 0, 20)
+	nDescLabel.Position = UDim2.new(0, 36, 0, 22)
 	nDescLabel.BackgroundTransparency = 1
 	nDescLabel.Font = fonts.regular
 	nDescLabel.Text = nContent
 	nDescLabel.TextColor3 = theme.textDesc
-	nDescLabel.TextSize = 10
+	nDescLabel.TextSize = 11
 	nDescLabel.TextXAlignment = Enum.TextXAlignment.Left
+	nDescLabel.ZIndex = 7
 	nDescLabel.Parent = notifyFrame
 
 	local progressBar = Instance.new("Frame")
@@ -2040,9 +2148,10 @@ function clickGui:Notify(config)
 	progressBar.Position = UDim2.new(0, 0, 1, -2)
 	progressBar.BackgroundColor3 = accentColor
 	progressBar.BorderSizePixel = 0
+	progressBar.ZIndex = 8
 	progressBar.Parent = notifyFrame
 
-	tween(notifyFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+	tween(notifyFrame, TweenInfo.new(0.28, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
 		Position = UDim2.new(0, 0, 0, 0)
 	})
 
@@ -2051,7 +2160,7 @@ function clickGui:Notify(config)
 	})
 
 	task.delay(nDuration, function()
-		local hideTween = tween(notifyFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
+		local hideTween = tween(notifyFrame, TweenInfo.new(0.22, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
 			Position = UDim2.new(0, 0, 0, -15)
 		})
 		hideTween.Completed:Connect(function()
