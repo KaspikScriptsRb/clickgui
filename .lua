@@ -73,6 +73,7 @@ local lucideSprites = {
 	["filter"] = {16898670775, {256, 256}, {0, 0}},
 	["check"] = {16898617411, {256, 256}, {257, 0}},
 	["x"] = {16898791349, {256, 256}, {257, 0}},
+	["arrow-right"] = {16898614275, {256, 256}, {514, 0}},
 	["chevron-down"] = {16898617411, {256, 256}, {514, 257}},
 	["chevron-up"] = {16898617509, {256, 256}, {514, 514}},
 	["chevron-left"] = {16898617509, {256, 256}, {0, 257}},
@@ -894,7 +895,7 @@ function clickGui:CreateWindow(config)
 
 			table.insert(clickGui.modules, moduleObject)
 
-			local function setToggle(val, silent)
+			local function setToggle(val, silent, fromKeybind)
 				moduleObject.state = val
 				local targetColor = val and theme.accent or theme.switchOff
 				local targetKnobPos = val and UDim2.new(1, -14, 0.5, -6) or UDim2.new(0, 2, 0.5, -6)
@@ -903,12 +904,14 @@ function clickGui:CreateWindow(config)
 				tween(switchKnob, TweenInfo.new(0.22, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = targetKnobPos})
 
 				if not silent then
+					local bName = (fromKeybind and moduleObject.bind ~= Enum.KeyCode.None) and moduleObject.bind.Name or nil
 					clickGui:Notify({
 						title = modName,
 						content = "Module was " .. (val and "enabled." or "disabled."),
 						duration = 2.5,
 						icon = val and "check" or "x",
-						accentColor = val and theme.green or theme.red
+						accentColor = val and theme.green or theme.red,
+						bindName = bName
 					})
 				end
 
@@ -922,7 +925,7 @@ function clickGui:CreateWindow(config)
 			end
 
 			toggleSwitch.MouseButton1Click:Connect(function()
-				setToggle(not moduleObject.state)
+				setToggle(not moduleObject.state, false, false)
 			end)
 
 			local function unbindKeyFromOthers(targetMod, key)
@@ -991,7 +994,7 @@ function clickGui:CreateWindow(config)
 			UserInputService.InputBegan:Connect(function(input, gameProcessed)
 				if gameProcessed then return end
 				if moduleObject.bind ~= Enum.KeyCode.None and input.KeyCode == moduleObject.bind then
-					setToggle(not moduleObject.state)
+					setToggle(not moduleObject.state, false, true)
 				end
 			end)
 
@@ -1686,17 +1689,31 @@ function clickGui:CreateWindow(config)
 
 				local cpContainer = Instance.new("Frame")
 				cpContainer.Name = "Colorpicker_" .. cpName
-				cpContainer.Size = UDim2.new(1, 0, 0, cpDesc ~= "" and 34 or 24)
+				cpContainer.Size = UDim2.new(1, 0, 0, 0)
 				cpContainer.BackgroundTransparency = 1
 				cpContainer.LayoutOrder = itemOrder
+				cpContainer.AutomaticSize = Enum.AutomaticSize.Y
 				cpContainer.ZIndex = 23
 				cpContainer.Parent = cardFrame
+
+				local cpLayout = Instance.new("UIListLayout")
+				cpLayout.FillDirection = Enum.FillDirection.Vertical
+				cpLayout.SortOrder = Enum.SortOrder.LayoutOrder
+				cpLayout.Padding = UDim.new(0, 4)
+				cpLayout.Parent = cpContainer
+
+				local headerRow = Instance.new("Frame")
+				headerRow.Size = UDim2.new(1, 0, 0, cpDesc ~= "" and 34 or 24)
+				headerRow.BackgroundTransparency = 1
+				headerRow.LayoutOrder = 1
+				headerRow.ZIndex = 23
+				headerRow.Parent = cpContainer
 
 				local textWrap = Instance.new("Frame")
 				textWrap.Size = UDim2.new(1, -36, 1, 0)
 				textWrap.BackgroundTransparency = 1
 				textWrap.ZIndex = 23
-				textWrap.Parent = cpContainer
+				textWrap.Parent = headerRow
 
 				local textWrapLayout = Instance.new("UIListLayout")
 				textWrapLayout.FillDirection = Enum.FillDirection.Vertical
@@ -1736,7 +1753,7 @@ function clickGui:CreateWindow(config)
 				previewBtn.Text = ""
 				previewBtn.AutoButtonColor = false
 				previewBtn.ZIndex = 24
-				previewBtn.Parent = cpContainer
+				previewBtn.Parent = headerRow
 
 				local pCorner = Instance.new("UICorner")
 				pCorner.CornerRadius = UDim.new(0, 4)
@@ -1747,19 +1764,234 @@ function clickGui:CreateWindow(config)
 				pStroke.Thickness = 1
 				pStroke.Parent = previewBtn
 
+				local panel = Instance.new("Frame")
+				panel.Name = "Panel"
+				panel.Size = UDim2.new(1, 0, 0, 0)
+				panel.BackgroundColor3 = theme.element
+				panel.BorderSizePixel = 0
+				panel.ClipsDescendants = true
+				panel.LayoutOrder = 2
+				panel.ZIndex = 24
+				panel.Parent = cpContainer
+
+				local panelCorner = Instance.new("UICorner")
+				panelCorner.CornerRadius = UDim.new(0, 6)
+				panelCorner.Parent = panel
+
+				local panelStroke = Instance.new("UIStroke")
+				panelStroke.Color = theme.cardBorder
+				panelStroke.Thickness = 1
+				panelStroke.Parent = panel
+
+				local panelPad = Instance.new("UIPadding")
+				panelPad.PaddingTop = UDim.new(0, 8)
+				panelPad.PaddingBottom = UDim.new(0, 8)
+				panelPad.PaddingLeft = UDim.new(0, 8)
+				panelPad.PaddingRight = UDim.new(0, 8)
+				panelPad.Parent = panel
+
+				local panelLayout = Instance.new("UIListLayout")
+				panelLayout.FillDirection = Enum.FillDirection.Vertical
+				panelLayout.Padding = UDim.new(0, 6)
+				panelLayout.Parent = panel
+
+				local currentHue, currentSat, currentVal = Color3.toHSV(cpDef)
 				local currentColor = cpDef
-				previewBtn.MouseEnter:Connect(function()
-					tween(previewBtn, TweenInfo.new(0.15), {Size = UDim2.new(0, 26, 0, 16)})
+
+				local presetsRow = Instance.new("Frame")
+				presetsRow.Size = UDim2.new(1, 0, 0, 16)
+				presetsRow.BackgroundTransparency = 1
+				presetsRow.ZIndex = 25
+				presetsRow.Parent = panel
+
+				local presetsLayout = Instance.new("UIListLayout")
+				presetsLayout.FillDirection = Enum.FillDirection.Horizontal
+				presetsLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+				presetsLayout.Padding = UDim.new(0, 6)
+				presetsLayout.Parent = presetsRow
+
+				local presetColors = {
+					Color3.fromRGB(124, 92, 252),
+					Color3.fromRGB(59, 130, 246),
+					Color3.fromRGB(6, 182, 212),
+					Color3.fromRGB(16, 185, 129),
+					Color3.fromRGB(245, 158, 11),
+					Color3.fromRGB(239, 68, 68),
+					Color3.fromRGB(236, 72, 153),
+					Color3.fromRGB(255, 255, 255)
+				}
+
+				local function applyColor(col, silent)
+					currentColor = col
+					currentHue, currentSat, currentVal = Color3.toHSV(col)
+					previewBtn.BackgroundColor3 = col
+					if not silent then cpCallback(col) end
+				end
+
+				for _, pCol in ipairs(presetColors) do
+					local dot = Instance.new("TextButton")
+					dot.Size = UDim2.new(0, 14, 0, 14)
+					dot.BackgroundColor3 = pCol
+					dot.Text = ""
+					dot.AutoButtonColor = false
+					dot.ZIndex = 26
+					dot.Parent = presetsRow
+
+					local dotCorner = Instance.new("UICorner")
+					dotCorner.CornerRadius = UDim.new(1, 0)
+					dotCorner.Parent = dot
+
+					dot.MouseEnter:Connect(function()
+						tween(dot, TweenInfo.new(0.15), {Size = UDim2.new(0, 16, 0, 16)})
+					end)
+					dot.MouseLeave:Connect(function()
+						tween(dot, TweenInfo.new(0.15), {Size = UDim2.new(0, 14, 0, 14)})
+					end)
+					dot.MouseButton1Click:Connect(function()
+						applyColor(pCol, false)
+					end)
+				end
+
+				local hueTrack = Instance.new("TextButton")
+				hueTrack.Size = UDim2.new(1, 0, 0, 8)
+				hueTrack.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+				hueTrack.Text = ""
+				hueTrack.AutoButtonColor = false
+				hueTrack.ZIndex = 25
+				hueTrack.Parent = panel
+
+				local hueCorner = Instance.new("UICorner")
+				hueCorner.CornerRadius = UDim.new(1, 0)
+				hueCorner.Parent = hueTrack
+
+				local hueGrad = Instance.new("UIGradient")
+				hueGrad.Color = ColorSequence.new({
+					ColorSequenceKeypoint.new(0.0, Color3.fromHSV(0, 1, 1)),
+					ColorSequenceKeypoint.new(0.17, Color3.fromHSV(0.17, 1, 1)),
+					ColorSequenceKeypoint.new(0.33, Color3.fromHSV(0.33, 1, 1)),
+					ColorSequenceKeypoint.new(0.5, Color3.fromHSV(0.5, 1, 1)),
+					ColorSequenceKeypoint.new(0.67, Color3.fromHSV(0.67, 1, 1)),
+					ColorSequenceKeypoint.new(0.83, Color3.fromHSV(0.83, 1, 1)),
+					ColorSequenceKeypoint.new(1.0, Color3.fromHSV(1, 1, 1))
+				})
+				hueGrad.Parent = hueTrack
+
+				local hueKnob = Instance.new("Frame")
+				hueKnob.Size = UDim2.new(0, 10, 0, 10)
+				hueKnob.AnchorPoint = Vector2.new(0.5, 0.5)
+				hueKnob.Position = UDim2.new(currentHue, 0, 0.5, 0)
+				hueKnob.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+				hueKnob.ZIndex = 26
+				hueKnob.Parent = hueTrack
+
+				local hueKnobCorner = Instance.new("UICorner")
+				hueKnobCorner.CornerRadius = UDim.new(1, 0)
+				hueKnobCorner.Parent = hueKnob
+
+				local valTrack = Instance.new("TextButton")
+				valTrack.Size = UDim2.new(1, 0, 0, 8)
+				valTrack.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+				valTrack.Text = ""
+				valTrack.AutoButtonColor = false
+				valTrack.ZIndex = 25
+				valTrack.Parent = panel
+
+				local valCorner = Instance.new("UICorner")
+				valCorner.CornerRadius = UDim.new(1, 0)
+				valCorner.Parent = valTrack
+
+				local valGrad = Instance.new("UIGradient")
+				valGrad.Color = ColorSequence.new({
+					ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 0, 0)),
+					ColorSequenceKeypoint.new(1, Color3.fromHSV(currentHue, 1, 1))
+				})
+				valGrad.Parent = valTrack
+
+				local valKnob = Instance.new("Frame")
+				valKnob.Size = UDim2.new(0, 10, 0, 10)
+				valKnob.AnchorPoint = Vector2.new(0.5, 0.5)
+				valKnob.Position = UDim2.new(currentVal, 0, 0.5, 0)
+				valKnob.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+				valKnob.ZIndex = 26
+				valKnob.Parent = valTrack
+
+				local valKnobCorner = Instance.new("UICorner")
+				valKnobCorner.CornerRadius = UDim.new(1, 0)
+				valKnobCorner.Parent = valKnob
+
+				local draggingHue = false
+				local draggingVal = false
+
+				local function updateHue(input)
+					local absPos = hueTrack.AbsolutePosition.X
+					local absSize = hueTrack.AbsoluteSize.X
+					local percent = math.clamp((input.Position.X - absPos) / absSize, 0, 1)
+					currentHue = percent
+					hueKnob.Position = UDim2.new(percent, 0, 0.5, 0)
+					valGrad.Color = ColorSequence.new({
+						ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 0, 0)),
+						ColorSequenceKeypoint.new(1, Color3.fromHSV(currentHue, 1, 1))
+					})
+					local newCol = Color3.fromHSV(currentHue, math.max(currentSat, 0.8), currentVal)
+					applyColor(newCol, false)
+				end
+
+				local function updateVal(input)
+					local absPos = valTrack.AbsolutePosition.X
+					local absSize = valTrack.AbsoluteSize.X
+					local percent = math.clamp((input.Position.X - absPos) / absSize, 0, 1)
+					currentVal = percent
+					valKnob.Position = UDim2.new(percent, 0, 0.5, 0)
+					local newCol = Color3.fromHSV(currentHue, math.max(currentSat, 0.8), currentVal)
+					applyColor(newCol, false)
+				end
+
+				hueTrack.InputBegan:Connect(function(input)
+					if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+						draggingHue = true
+						updateHue(input)
+					end
 				end)
-				previewBtn.MouseLeave:Connect(function()
-					tween(previewBtn, TweenInfo.new(0.15), {Size = UDim2.new(0, 24, 0, 14)})
+
+				valTrack.InputBegan:Connect(function(input)
+					if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+						draggingVal = true
+						updateVal(input)
+					end
+				end)
+
+				UserInputService.InputEnded:Connect(function(input)
+					if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+						draggingHue = false
+						draggingVal = false
+					end
+				end)
+
+				UserInputService.InputChanged:Connect(function(input)
+					if draggingHue and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+						updateHue(input)
+					elseif draggingVal and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+						updateVal(input)
+					end
+				end)
+
+				local isOpen = false
+				previewBtn.MouseButton1Click:Connect(function()
+					isOpen = not isOpen
+					local targetH = isOpen and 74 or 0
+					tween(panel, TweenInfo.new(0.24, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+						Size = UDim2.new(1, 0, 0, targetH)
+					})
+					tween(pStroke, TweenInfo.new(0.2), {
+						Color = isOpen and theme.accent or theme.cardBorder
+					})
 				end)
 
 				local colorObj = {}
 				function colorObj:Set(newCol, silent)
-					currentColor = newCol
-					previewBtn.BackgroundColor3 = newCol
-					if not silent then cpCallback(newCol) end
+					applyColor(newCol, silent)
+					hueKnob.Position = UDim2.new(currentHue, 0, 0.5, 0)
+					valKnob.Position = UDim2.new(currentVal, 0, 0.5, 0)
 				end
 				function colorObj:Get()
 					return currentColor
@@ -2215,7 +2447,7 @@ function clickGui:Notify(config)
 	nIconImg.Parent = notifyFrame
 
 	local nTitleLabel = Instance.new("TextLabel")
-	nTitleLabel.Size = UDim2.new(1, -38, 0, 15)
+	nTitleLabel.Size = UDim2.new(1, config.bindName and -80 or -38, 0, 15)
 	nTitleLabel.Position = UDim2.new(0, 36, 0, 6)
 	nTitleLabel.BackgroundTransparency = 1
 	nTitleLabel.Font = fonts.bold
@@ -2223,8 +2455,71 @@ function clickGui:Notify(config)
 	nTitleLabel.TextColor3 = theme.text
 	nTitleLabel.TextSize = 13
 	nTitleLabel.TextXAlignment = Enum.TextXAlignment.Left
+	nTitleLabel.TextTruncate = Enum.TextTruncate.AtEnd
 	nTitleLabel.ZIndex = 7
 	nTitleLabel.Parent = notifyFrame
+
+	if config.bindName and config.bindName ~= "" and config.bindName ~= "None" then
+		local bindBadge = Instance.new("Frame")
+		bindBadge.Name = "BindBadge"
+		bindBadge.AutomaticSize = Enum.AutomaticSize.X
+		bindBadge.Size = UDim2.new(0, 0, 0, 16)
+		bindBadge.Position = UDim2.new(1, -10, 0, 5)
+		bindBadge.AnchorPoint = Vector2.new(1, 0)
+		bindBadge.BackgroundColor3 = theme.element
+		bindBadge.BorderSizePixel = 0
+		bindBadge.ZIndex = 7
+		bindBadge.Parent = notifyFrame
+
+		local badgeCorner = Instance.new("UICorner")
+		badgeCorner.CornerRadius = UDim.new(0, 4)
+		badgeCorner.Parent = bindBadge
+
+		local badgeStroke = Instance.new("UIStroke")
+		badgeStroke.Color = theme.cardBorder
+		badgeStroke.Thickness = 1
+		badgeStroke.Parent = bindBadge
+
+		local badgePad = Instance.new("UIPadding")
+		badgePad.PaddingLeft = UDim.new(0, 4)
+		badgePad.PaddingRight = UDim.new(0, 5)
+		badgePad.PaddingTop = UDim.new(0, 2)
+		badgePad.PaddingBottom = UDim.new(0, 2)
+		badgePad.Parent = bindBadge
+
+		local badgeLayout = Instance.new("UIListLayout")
+		badgeLayout.FillDirection = Enum.FillDirection.Horizontal
+		badgeLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+		badgeLayout.Padding = UDim.new(0, 3)
+		badgeLayout.Parent = bindBadge
+
+		local arrowImg = Instance.new("ImageLabel")
+		arrowImg.Size = UDim2.new(0, 10, 0, 10)
+		arrowImg.BackgroundTransparency = 1
+		clickGui.applyIcon(arrowImg, "arrow-right")
+		arrowImg.ImageColor3 = theme.textDark
+		arrowImg.ZIndex = 8
+		arrowImg.Parent = bindBadge
+
+		local kbImg = Instance.new("ImageLabel")
+		kbImg.Size = UDim2.new(0, 11, 0, 11)
+		kbImg.BackgroundTransparency = 1
+		clickGui.applyIcon(kbImg, "keyboard")
+		kbImg.ImageColor3 = theme.accentLight
+		kbImg.ZIndex = 8
+		kbImg.Parent = bindBadge
+
+		local bindKeyLbl = Instance.new("TextLabel")
+		bindKeyLbl.AutomaticSize = Enum.AutomaticSize.X
+		bindKeyLbl.Size = UDim2.new(0, 0, 1, 0)
+		bindKeyLbl.BackgroundTransparency = 1
+		bindKeyLbl.Font = fonts.bold
+		bindKeyLbl.Text = config.bindName
+		bindKeyLbl.TextColor3 = theme.accentLight
+		bindKeyLbl.TextSize = 10
+		bindKeyLbl.ZIndex = 8
+		bindKeyLbl.Parent = bindBadge
+	end
 
 	local nDescLabel = Instance.new("TextLabel")
 	nDescLabel.Size = UDim2.new(1, -38, 0, 14)
