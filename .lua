@@ -625,7 +625,8 @@ function clickGui:CreateWindow(config)
 
 		local columnsContainer = Instance.new("Frame")
 		columnsContainer.Name = "Columns"
-		columnsContainer.Size = UDim2.new(1, 0, 1, 0)
+		columnsContainer.Size = UDim2.new(1, 0, 0, 0)
+		columnsContainer.AutomaticSize = Enum.AutomaticSize.Y
 		columnsContainer.BackgroundTransparency = 1
 		columnsContainer.ZIndex = 21
 		columnsContainer.Parent = tabPage
@@ -634,7 +635,7 @@ function clickGui:CreateWindow(config)
 		colPadding.PaddingLeft = UDim.new(0, 4)
 		colPadding.PaddingRight = UDim.new(0, 4)
 		colPadding.PaddingTop = UDim.new(0, 4)
-		colPadding.PaddingBottom = UDim.new(0, 12)
+		colPadding.PaddingBottom = UDim.new(0, 16)
 		colPadding.Parent = columnsContainer
 
 		local totalUsableWidth = 900 - 20 - 8
